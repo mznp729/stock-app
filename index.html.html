@@ -373,7 +373,7 @@ window.saveWebApp = function() {
 window.uploadToDrive = function() {
   var url = localStorage.getItem('webAppUrl');
   if (!url) { showToast('ابتدا آدرس را ذخیره کنید', 'error'); return; }
-  fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({user:currentUser,data:data}) })
+  fetch(url, { method: 'POST', body: JSON.stringify({user:currentUser,data:data}) })
     .then(function(r){return r.json();}).then(function(res){ showToast(res.success?'☁️ ذخیره شد ✅':'خطا در ذخیره','success'); })
     .catch(function(e){ showToast('خطا: '+e.message,'error'); });
 };
