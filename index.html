@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070b16">
+<title>دفتر معاملات سهام</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#070b16; --deep:#0b1222; --surface:#101a2e; --surface2:#16233c; --overlay:#1c2b47;
+  --line:#24354f; --line2:#2f4463;
+  --ink:#f2f6fc; --ink2:#c3d2e6; --mute:#8fa3bf; --faint:#61748f;
+  --cyan:#22d3ee; --cyan-d:#06b6d4; --blue:#3b82f6; --violet:#8b5cf6; --magenta:#ff2ea6;
+  --acid:#4ade80; --green:#22c55e; --red:#ff3b5c; --amber:#ffb020; --lime:#a3e635;
+  --r-s:10px; --r-m:14px; --r-l:20px;
+  --sh-1:0 2px 8px rgba(0,0,0,.35); --sh-2:0 14px 40px rgba(0,0,0,.45);
+  --sh-glow:0 0 0 1px rgba(34,211,238,.25), 0 10px 34px rgba(6,182,212,.18);
+  --hdr:64px; --rail:52px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scrollbar-color:var(--cyan-d) var(--deep);scrollbar-width:thin}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--deep);border-radius:99px}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--cyan-d),var(--violet));border-radius:99px;border:3px solid var(--deep)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--cyan),var(--magenta))}
+::-webkit-scrollbar-corner{background:var(--deep)}
+body{font-family:'Vazirmatn',Tahoma,system-ui,sans-serif;background:var(--void);color:var(--ink);min-height:100vh;font-variant-numeric:tabular-nums;overflow-x:hidden}
+.bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aurora{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;mix-blend-mode:screen}
+.a1{width:52vw;height:52vw;background:radial-gradient(circle,rgba(6,182,212,.55),transparent 68%);top:-16vw;right:-10vw;animation:d1 26s ease-in-out infinite}
+.a2{width:46vw;height:46vw;background:radial-gradient(circle,rgba(139,92,246,.5),transparent 68%);bottom:-18vw;left:-12vw;animation:d2 32s ease-in-out infinite}
+.a3{width:34vw;height:34vw;background:radial-gradient(circle,rgba(255,46,166,.32),transparent 70%);top:38%;left:44%;animation:d3 38s ease-in-out infinite}
+@keyframes d1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-6vw,7vh) scale(1.12)}}
+@keyframes d2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(7vw,-6vh) scale(1.15)}}
+@keyframes d3{0%,100%{transform:translate(0,0) scale(.9)}50%{transform:translate(-8vw,-5vh) scale(1.1)}}
+.grain{position:absolute;inset:0;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+.gridlines{position:absolute;inset:0;opacity:.35;background-image:linear-gradient(rgba(36,53,79,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(36,53,79,.35) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at 50% 0%,#000 20%,transparent 78%)}
+
+header{position:fixed;top:0;right:0;left:0;height:var(--hdr);z-index:60;display:flex;align-items:center;gap:14px;padding:0 18px;background:linear-gradient(180deg,rgba(11,18,34,.96),rgba(11,18,34,.82));backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--cyan),var(--blue) 45%,var(--violet));display:grid;place-items:center;font-size:17px;box-shadow:var(--sh-glow)}
+.brand h1{font-size:1.02rem;font-weight:800;background:linear-gradient(90deg,var(--cyan),#a5b4fc 60%,var(--magenta));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.brand small{display:block;font-size:.62rem;color:var(--faint);font-weight:500;letter-spacing:.4px}
+.pulse{display:flex;gap:8px;margin-inline-start:6px}
+.chip{display:flex;flex-direction:column;gap:1px;padding:5px 11px;border-radius:11px;background:var(--surface);border:1px solid var(--line);min-width:100px}
+.chip b{font-size:.82rem;font-weight:700;line-height:1.2}
+.chip span{font-size:.58rem;color:var(--faint)}
+.hdr-right{margin-inline-start:auto;display:flex;align-items:center;gap:8px}
+.usw{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:3px;gap:3px}
+.usw button{padding:5px 12px;border-radius:8px;border:0;background:transparent;color:var(--mute);font:inherit;font-size:.76rem;font-weight:600;cursor:pointer;transition:.18s}
+.usw button.on{background:linear-gradient(135deg,var(--cyan-d),var(--blue));color:#04121c}
+.icon-btn{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer;font-size:.9rem;display:grid;place-items:center;transition:.18s}
+.icon-btn:hover{border-color:var(--cyan-d);color:var(--cyan);transform:translateY(-1px)}
+
+.rail{position:fixed;top:var(--hdr);right:0;left:0;height:var(--rail);z-index:55;display:flex;align-items:center;gap:6px;padding:0 14px;overflow-x:auto;overflow-y:hidden;background:rgba(7,11,22,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.rail::-webkit-scrollbar{height:5px}.rail::-webkit-scrollbar-thumb{border-width:1px}
+.tab{flex-shrink:0;padding:7px 15px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);font:inherit;font-size:.79rem;font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.tab:hover{border-color:var(--line2);transform:translateY(-1px)}
+.tab.on{background:linear-gradient(135deg,rgba(34,211,238,.2),rgba(139,92,246,.22));border-color:var(--cyan-d);color:var(--cyan)}
+.tab .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+.tab .cnt{background:var(--amber);color:#231400;border-radius:99px;padding:0 6px;font-size:.62rem;font-weight:800}
+
+main{position:relative;z-index:1;max-width:1420px;margin:0 auto;padding:calc(var(--hdr) + var(--rail) + 20px) 16px 96px}
+.panel{display:none}.panel.on{display:block;animation:rise .4s cubic-bezier(.2,.7,.3,1)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card{background:linear-gradient(165deg,var(--surface),var(--deep) 70%);border:1px solid var(--line);border-radius:var(--r-l);padding:20px;margin-bottom:16px;box-shadow:var(--sh-1);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;right:0;left:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,211,238,.5),rgba(139,92,246,.4),transparent)}
+.card-h{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.card-h h2{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.card-h .sub{font-size:.7rem;color:var(--faint);font-weight:500}
+.card-h .spacer{margin-inline-start:auto}
+.ico{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:.85rem;background:linear-gradient(135deg,rgba(34,211,238,.18),rgba(139,92,246,.18));border:1px solid var(--line2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.calc5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.field label{display:block;font-size:.7rem;color:var(--mute);margin-bottom:5px;font-weight:500}
+input,select,textarea{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-s);background:var(--void);color:var(--ink);font:inherit;font-size:.85rem;transition:.16s}
+input:hover,select:hover{border-color:var(--line2)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--cyan-d);box-shadow:0 0 0 3px rgba(34,211,238,.16)}
+input::placeholder{color:var(--faint);font-size:.72rem}
+input:disabled{opacity:.4;cursor:not-allowed}
+select{cursor:pointer;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mute) 50%),linear-gradient(135deg,var(--mute) 50%,transparent 50%);background-position:calc(0% + 14px) calc(50% - 2px),calc(0% + 19px) calc(50% - 2px);background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-left:30px}
+.mini-inp{width:92px;padding:7px 5px;font-size:.8rem;text-align:center}
+.amber-inp{background:rgba(255,176,32,.1)!important;border-color:rgba(255,176,32,.45)!important}
+input[type=range]{-webkit-appearance:none;appearance:none;height:6px;padding:0;border:0;border-radius:99px;background:linear-gradient(90deg,var(--cyan-d),var(--violet));cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--ink);border:3px solid var(--cyan-d);box-shadow:0 2px 8px rgba(0,0,0,.5);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--ink);border:3px solid var(--cyan-d);cursor:pointer}
+button{font:inherit;cursor:pointer;border:0;transition:.18s}
+.btn{padding:9px 18px;border-radius:var(--r-s);font-size:.82rem;font-weight:700;color:#04121c;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.b-cyan{background:linear-gradient(135deg,var(--cyan),var(--cyan-d))}
+.b-blue{background:linear-gradient(135deg,#60a5fa,var(--blue));color:#fff}
+.b-green{background:linear-gradient(135deg,var(--acid),var(--green))}
+.b-red{background:linear-gradient(135deg,#ff6b83,var(--red));color:#fff}
+.b-amber{background:linear-gradient(135deg,#ffc95c,var(--amber))}
+.b-violet{background:linear-gradient(135deg,#a78bfa,var(--violet));color:#fff}
+.b-magenta{background:linear-gradient(135deg,#ff6bc0,var(--magenta));color:#fff}
+.b-ghost{background:var(--surface2);border:1px solid var(--line2);color:var(--ink2)}
+.b-ghost:hover{border-color:var(--cyan-d);color:var(--cyan)}
+.b-sm{padding:5px 11px;font-size:.72rem;border-radius:8px}
+.b-xs{padding:3px 8px;font-size:.68rem;border-radius:7px}
+.row-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.pchip{padding:5px 11px;border-radius:99px;border:1px solid var(--line2);background:var(--surface2);color:var(--ink2);font-size:.72rem;font-weight:700;cursor:pointer;transition:.16s}
+.pchip:hover{border-color:var(--cyan-d);color:var(--cyan);transform:translateY(-1px)}
+.stat{background:linear-gradient(160deg,var(--surface2),var(--deep));border:1px solid var(--line);border-radius:var(--r-m);padding:15px;text-align:center;position:relative;overflow:hidden}
+.stat .lbl{font-size:.66rem;color:var(--mute);font-weight:500}
+.stat .val{font-size:1.26rem;font-weight:800;margin-top:5px}
+.stat .edge{position:absolute;inset:auto 0 0 0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.val-box{padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-s);background:var(--void);font-size:.92rem;font-weight:700;text-align:center}
+.t-cyan{background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.4);color:var(--cyan)}
+.t-green{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.4);color:var(--acid)}
+.t-amber{background:rgba(255,176,32,.1);border-color:rgba(255,176,32,.4);color:var(--amber)}
+.t-violet{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.4);color:#c4b5fd}
+.pos{color:var(--acid)}.neg{color:var(--red)}.neu{color:var(--mute)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-m);background:rgba(7,11,22,.5)}
+table{width:100%;border-collapse:collapse;font-size:.78rem}
+th,td{padding:9px 8px;text-align:center;border-bottom:1px solid rgba(36,53,79,.7);vertical-align:middle;white-space:nowrap}
+th{background:linear-gradient(180deg,var(--surface2),var(--surface));color:var(--mute);font-weight:600;font-size:.7rem;position:sticky;top:0;z-index:2}
+tbody tr{transition:background .14s}tbody tr:hover{background:rgba(34,211,238,.055)}
+tbody tr:last-child td{border-bottom:0}
+tr.zero{opacity:.62}tr.zero:hover{opacity:1}
+tr.fresh{background:rgba(74,222,128,.09);box-shadow:inset 3px 0 0 var(--acid)}
+tr.sel{background:rgba(139,92,246,.13)}tr.clickable{cursor:pointer}
+tr.untagged{box-shadow:inset 3px 0 0 rgba(255,176,32,.65)}
+.badge{padding:3px 9px;border-radius:99px;font-size:.65rem;font-weight:700;display:inline-block}
+.bg-buy{background:rgba(74,222,128,.16);color:var(--acid);border:1px solid rgba(74,222,128,.3)}
+.bg-sell{background:rgba(255,59,92,.16);color:#ff8fa3;border:1px solid rgba(255,59,92,.3)}
+.bg-on{background:rgba(59,130,246,.16);color:#93c5fd;border:1px solid rgba(59,130,246,.3)}
+.bg-off{background:rgba(97,116,143,.16);color:var(--faint);border:1px solid var(--line2)}
+.bg-flat{background:rgba(255,176,32,.14);color:var(--amber);border:1px solid rgba(255,176,32,.3)}
+.bg-new{background:rgba(163,230,53,.16);color:var(--lime);border:1px solid rgba(163,230,53,.3)}
+.bg-save{background:rgba(139,92,246,.18);color:#c4b5fd;border:1px solid rgba(139,92,246,.4)}
+.bg-done{background:rgba(74,222,128,.18);color:var(--acid);border:1px solid rgba(74,222,128,.45)}
+.bg-warn{background:rgba(255,176,32,.16);color:var(--amber);border:1px solid rgba(255,176,32,.45);cursor:pointer}
+.rem-full{color:var(--acid);font-weight:700}.rem-part{color:var(--amber);font-weight:700}.rem-zero{color:var(--faint)}
+.risk{color:var(--red)!important;font-weight:800}
+.note{border-radius:var(--r-m);padding:11px 13px;font-size:.73rem;line-height:1.85;margin-bottom:12px}
+.n-cyan{border:1px solid rgba(34,211,238,.35);background:rgba(34,211,238,.07);color:#a5f3fc}
+.n-amber{border:1px dashed rgba(255,176,32,.5);background:rgba(255,176,32,.07);color:#fcd34d}
+.n-green{border:1px solid rgba(74,222,128,.35);background:rgba(74,222,128,.07);color:#bbf7d0}
+.n-violet{border:1px solid rgba(139,92,246,.4);background:rgba(139,92,246,.08);color:#ddd6fe}
+.n-red{border:1px solid rgba(255,59,92,.45);background:rgba(255,59,92,.09);color:#fecdd3}
+.n-mute{border:1px dashed var(--line2);background:rgba(143,163,191,.05);color:var(--mute)}
+.note b{color:#fff}
+.legend{font-size:.68rem;color:var(--faint);line-height:1.8;margin-top:10px}.legend b{color:var(--ink2)}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.toolbar .grow{margin-inline-start:auto}
+.search{position:relative;width:190px}.search input{padding-right:32px}
+.search::before{content:'🔍';position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.72rem;opacity:.6}
+.selbar{display:none;align-items:center;gap:10px;padding:9px 13px;border-radius:var(--r-m);background:linear-gradient(135deg,rgba(139,92,246,.16),rgba(255,46,166,.12));border:1px solid rgba(139,92,246,.4);margin-bottom:12px;font-size:.76rem}
+.selbar.on{display:flex;flex-wrap:wrap}
+.warnbar{display:none;align-items:center;gap:10px;padding:10px 13px;border-radius:var(--r-m);background:linear-gradient(135deg,rgba(255,176,32,.14),rgba(255,46,166,.07));border:1px solid rgba(255,176,32,.45);margin-bottom:12px;font-size:.74rem;color:#fde68a;flex-wrap:wrap}
+.warnbar.on{display:flex}
+.warnbar .grow{margin-inline-start:auto}
+.drop{border:2px dashed var(--line2);border-radius:var(--r-m);padding:26px;text-align:center;cursor:pointer;transition:.25s;background:rgba(7,11,22,.4)}
+.drop:hover,.drop.hot{border-color:var(--cyan-d);background:rgba(34,211,238,.07)}
+.drop p{color:var(--mute);font-size:.78rem;margin-top:8px}
+.subpanel{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}.subpanel.on{display:block}
+.sec{border-radius:var(--r-m);padding:15px;margin-bottom:14px;border:1px solid}
+.sec h3{font-size:.86rem;margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.s-violet{background:rgba(139,92,246,.07);border-color:rgba(139,92,246,.35)}.s-violet h3{color:#c4b5fd}
+.s-cyan{background:rgba(34,211,238,.06);border-color:rgba(34,211,238,.3)}.s-cyan h3{color:var(--cyan)}
+.s-green{background:rgba(74,222,128,.06);border-color:rgba(74,222,128,.3)}.s-green h3{color:var(--acid)}
+.s-amber{background:rgba(255,176,32,.06);border-color:rgba(255,176,32,.3)}.s-amber h3{color:var(--amber)}
+.s-magenta{background:rgba(255,46,166,.06);border-color:rgba(255,46,166,.3)}.s-magenta h3{color:#ff8fd0}
+.s-red{background:rgba(255,59,92,.07);border-color:rgba(255,59,92,.35)}.s-red h3{color:#fda4af}
+.sw-row{display:flex;align-items:center;gap:11px;padding:9px 0;font-size:.78rem;color:var(--ink2)}
+.sw-row .txt{flex:1}
+.sw{width:46px;height:25px;border-radius:99px;background:var(--line);border:1px solid var(--line2);position:relative;flex-shrink:0;cursor:pointer;transition:.2s}
+.sw i{position:absolute;top:2px;right:2px;width:19px;height:19px;border-radius:50%;background:var(--faint);transition:.2s;display:block}
+.sw.on{background:linear-gradient(90deg,var(--violet),var(--magenta));border-color:var(--violet)}
+.sw.on i{right:23px;background:#fff}
+.save-panel{border:1px solid rgba(139,92,246,.45);background:linear-gradient(150deg,rgba(139,92,246,.12),rgba(255,46,166,.05));border-radius:var(--r-m);padding:13px;margin-top:14px}
+.save-panel h4{font-size:.8rem;color:#ddd6fe;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.mini-kv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.mini-kv div{background:rgba(7,11,22,.5);border:1px solid var(--line);border-radius:9px;padding:7px;text-align:center}
+.mini-kv span{display:block;font-size:.6rem;color:var(--mute)}
+.mini-kv b{font-size:.78rem}
+.viz{display:grid;grid-template-columns:250px 1fr;gap:16px;align-items:center}
+.donut-wrap{position:relative;display:grid;place-items:center}.donut-wrap svg{overflow:visible}
+.donut-center{position:absolute;text-align:center;pointer-events:none}
+.donut-center b{display:block;font-size:.95rem;font-weight:800}.donut-center span{font-size:.6rem;color:var(--faint)}
+.slice{transition:opacity .18s,transform .18s;transform-origin:center;cursor:pointer}
+.slice:hover{opacity:1!important;transform:scale(1.035)}
+.legend-list{display:flex;flex-direction:column;gap:6px}
+.lg-item{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:9px;background:rgba(7,11,22,.45);border:1px solid var(--line);font-size:.72rem;transition:.16s}
+.lg-item:hover{border-color:var(--line2);transform:translateX(-2px)}
+.lg-dot{width:11px;height:11px;border-radius:4px;flex-shrink:0}
+.lg-item .nm{font-weight:700;min-width:52px}.lg-item .pc{color:var(--mute);font-size:.68rem}
+.lg-item .vv{margin-inline-start:auto;font-weight:600;font-size:.7rem}
+.bars{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.bar-row{display:grid;grid-template-columns:64px 1fr 120px;gap:9px;align-items:center;font-size:.72rem}
+.bar-track{height:9px;border-radius:99px;background:rgba(36,53,79,.6);overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.2,.7,.3,1)}
+.scrim{position:fixed;inset:0;background:rgba(3,6,14,.72);backdrop-filter:blur(4px);z-index:90;opacity:0;pointer-events:none;transition:.25s}
+.scrim.on{opacity:1;pointer-events:auto}
+.modal{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:18px}.modal.on{display:grid}
+.modal-box{background:linear-gradient(165deg,var(--surface),var(--deep));border:1px solid var(--line2);border-radius:var(--r-l);padding:22px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:var(--sh-2);animation:rise .28s ease}
+.modal-box h3{font-size:.98rem;margin-bottom:15px;display:flex;align-items:center;gap:8px}
+.x{margin-inline-start:auto;width:28px;height:28px;border-radius:8px;background:var(--overlay);color:var(--mute);display:grid;place-items:center;font-size:.9rem}
+.x:hover{background:var(--red);color:#fff}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:min(440px,94vw);z-index:100;background:linear-gradient(200deg,var(--surface),var(--void));border-right:1px solid var(--line2);box-shadow:var(--sh-2);transform:translateX(-102%);transition:transform .32s cubic-bezier(.2,.8,.25,1);display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.drawer-h{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,rgba(34,211,238,.1),transparent)}
+.drawer-h h3{font-size:.94rem;font-weight:700}
+.drawer-b{padding:16px 18px;overflow-y:auto;flex:1}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:.76rem;margin-bottom:14px}
+.kv dt{color:var(--mute)}.kv dd{font-weight:600;text-align:left}
+.trace-tbl{font-size:.7rem}.trace-tbl th{position:static}
+.toast{position:fixed;top:calc(var(--hdr) + 12px);left:50%;transform:translateX(-50%) translateY(-14px);padding:11px 20px;border-radius:var(--r-m);font-size:.8rem;font-weight:600;z-index:200;opacity:0;pointer-events:none;transition:.28s;max-width:92vw;box-shadow:var(--sh-2);color:#04121c}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:linear-gradient(135deg,var(--acid),var(--green))}
+.toast.err{background:linear-gradient(135deg,#ff6b83,var(--red));color:#fff}
+.toast.warn{background:linear-gradient(135deg,#ffc95c,var(--amber))}
+.toast.info{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#fff}
+.undo{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:99px;background:var(--overlay);border:1px solid var(--line2);box-shadow:var(--sh-2);z-index:190;font-size:.78rem;opacity:0;pointer-events:none;transition:.28s}
+.undo.on{opacity:1;transform:translateX(-50%);pointer-events:auto}
+.save-meter{height:7px;border-radius:99px;background:rgba(36,53,79,.7);overflow:hidden;margin-top:5px;width:110px;display:inline-block;vertical-align:middle}
+.save-meter i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--violet),var(--magenta));transition:width .45s}
+.plan-big{height:12px;border-radius:99px;background:rgba(36,53,79,.7);overflow:hidden;margin:10px 0 4px}
+.plan-big i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--violet),var(--magenta),var(--amber));transition:width .4s}
+.o1{order:1}.o2{order:2}.o3{order:3}.o4{order:4}.o5{order:5}
+.p1{order:6}.p2{order:7}.p3{order:8}.p4{order:9}
+.mB7{order:10;grid-column:1}.mB8{order:11;grid-column:2}.mB11{order:12;grid-column:4}.mB12{order:13;grid-column:5}
+.mode-badge{padding:3px 10px;border-radius:99px;font-size:.65rem;font-weight:700}
+.m-single{background:rgba(59,130,246,.18);color:#93c5fd}.m-two{background:rgba(255,46,166,.18);color:#ff8fd0}
+@media(max-width:1040px){.viz{grid-template-columns:1fr}.pulse .chip:nth-child(4){display:none}}
+@media(max-width:768px){
+  :root{--hdr:58px;--rail:46px}
+  header{padding:0 11px;gap:9px}.brand h1{font-size:.86rem}.brand small{display:none}
+  .mark{width:29px;height:29px;font-size:14px}.pulse{display:none}
+  .usw button{padding:4px 9px;font-size:.7rem}
+  main{padding:calc(var(--hdr) + var(--rail) + 14px) 10px 88px}
+  .card{padding:14px;border-radius:var(--r-m)}
+  .grid4,.grid3{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}
+  .calc5{grid-template-columns:1fr 1fr}
+  .p1{order:4}.p2{order:5}.p3{order:6}.o4{order:7}
+  .mB11{order:8;grid-column:auto}.o5{order:9}.mB7{order:10;grid-column:auto}
+  .mB12{order:11;grid-column:auto}.mB8{order:12;grid-column:auto}.p4{order:13}
+  .o1,.o3,.p1,.p3,.o4{grid-column:1}.o2,.p2{grid-column:2}
+  table{font-size:.68rem}th,td{padding:6px 4px}
+  .stat .val{font-size:1rem}
+  .mini-inp{width:76px;font-size:.7rem;padding:6px 3px}
+  .search{width:100%}.toolbar .grow{margin-inline-start:0;width:100%}
+  .bar-row{grid-template-columns:52px 1fr 92px;font-size:.66rem}
+  .note{font-size:.67rem;line-height:1.75}.drawer{width:100vw}
+  .save-meter{width:74px}.mini-kv{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="bg-fx"><div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div><div class="gridlines"></div><div class="grain"></div></div>
+
+<header>
+  <div class="brand"><div class="mark">📊</div><div><h1>دفتر معاملات سهام</h1><small>LEDGER · سیو سود پله‌ای</small></div></div>
+  <div class="pulse">
+    <div class="chip"><b id="pulsePortfolio">۰</b><span>ارزش پرتفوی</span></div>
+    <div class="chip"><b id="pulsePnl">۰</b><span>سود / زیان باز</span></div>
+    <div class="chip"><b id="pulseCash">۰</b><span>نقد آزاد</span></div>
+    <div class="chip"><b id="pulseTaken" style="color:#c4b5fd">۰٪</b><span>برداشت از سود</span></div>
+  </div>
+  <div class="hdr-right">
+    <button class="icon-btn" id="soundBtn" title="صدای رویدادها" onclick="toggleSound()">🔊</button>
+    <div class="usw"><button id="u1" class="on" onclick="switchUser('user1')">کاربر ۱</button><button id="u2" onclick="switchUser('user2')">کاربر ۲</button></div>
+  </div>
+</header>
+
+<nav class="rail">
+  <button class="tab on" data-p="calc" onclick="showTab('calc',this)"><span class="dot"></span>محاسبات</button>
+  <button class="tab" data-p="trade" onclick="showTab('trade',this)"><span class="dot"></span>معاملات<span class="cnt" id="railUntagged" style="display:none">۰</span></button>
+  <button class="tab" data-p="cash" onclick="showTab('cash',this)"><span class="dot"></span>نقدی</button>
+  <button class="tab" data-p="day" onclick="showTab('day',this)"><span class="dot"></span>قیمت روز</button>
+  <button class="tab" data-p="fee" onclick="showTab('fee',this)"><span class="dot"></span>کارمزد</button>
+  <button class="tab" data-p="backup" onclick="showTab('backup',this)"><span class="dot"></span>پشتیبان</button>
+</nav>
+
+<main>
+<div class="note n-red" id="protoWarn" style="display:none">
+  ⚠️ برنامه از روی <b>فایل محلی (file://)</b> باز شده است. همگام‌سازی Drive و اسکن QR در این حالت کار نمی‌کند. فایل را روی GitHub Pages بگذار یا با سرور محلی باز کن. سایر بخش‌ها کامل کار می‌کنند.
+</div>
+<div class="note n-green" id="guardNote" style="display:none"></div>
+
+<section class="panel on" id="p-calc">
+  <div class="card">
+    <div class="card-h"><div class="ico">📈</div><h2>محاسبه‌گر افزایش سهم در اصلاح</h2><span class="mode-badge m-single" id="calcBadge">تک‌مرحله‌ای</span></div>
+    <div class="calc5">
+      <div class="field o1"><label>B4 · تعداد سهم فروشی</label><input class="num-fmt" inputmode="numeric" id="calcQty" placeholder="تعداد"></div>
+      <div class="field o2"><label>B5 · قیمت فروش</label><input class="num-fmt" inputmode="numeric" id="calcSellPrice" placeholder="ریال"></div>
+      <div class="field o3"><label>B6 · قیمت خرید در اصلاح</label><input class="num-fmt" inputmode="numeric" id="calcBuyPrice" placeholder="ریال"></div>
+      <div class="field o4"><label>B10 · تعداد هدف فرضی</label><input class="num-fmt amber-inp" inputmode="numeric" id="calcTargetQty" placeholder="سهم اضافه"></div>
+      <div class="field o5"><label>سهم‌های اضافه شده</label><div class="val-box t-green" id="resAdd">۰</div></div>
+      <div class="field p1"><label>B'4 · فروش مرحله ۲</label><input class="num-fmt" inputmode="numeric" id="calcQty2" placeholder="تعداد"></div>
+      <div class="field p2"><label>B'5 · قیمت فروش ۲</label><input class="num-fmt" inputmode="numeric" id="calcSellPrice2" placeholder="ریال"></div>
+      <div class="field p3"><label>B'6 · خرید اصلاح (پله‌ای)</label><input class="num-fmt" inputmode="numeric" id="calcBuyPrice2" placeholder="ریال"></div>
+      <div class="p4" style="display:flex;align-items:center"><span style="font-size:.66rem;color:var(--faint);line-height:1.7">اختیاری — فقط برای فروش پله‌ای دومرحله‌ای پر کن.</span></div>
+      <div class="field mB7"><label>حداکثر خرید برای ۱+ سهم (B7)</label><div class="val-box t-cyan" id="resB7">۰</div></div>
+      <div class="field mB8"><label>حداکثر خرید برای ۲+ سهم (B8)</label><div class="val-box t-green" id="resB8">۰</div></div>
+      <div class="field mB11"><label>قیمت هدف B10 (B11)</label><div class="val-box t-amber" id="resB11">۰</div></div>
+      <div class="field mB12"><label>کل سهام قابل خرید (B12)</label><div class="val-box t-violet" id="resB12">۰</div></div>
+    </div>
+    <div class="legend" id="calcMode">حالت تک‌مرحله‌ای — روال پایه</div>
+  </div>
+  <div class="card">
+    <div class="card-h"><div class="ico">⚙️</div><h2>تنظیمات محاسبه</h2></div>
+    <div class="grid4">
+      <div class="field"><label>ضریب کارمزد</label><input type="number" id="commissionRate" value="0.0012" step="0.0001" min="0"></div>
+      <div class="field"><label>ضریب حد سود</label><input type="number" id="takeProfitMult" value="1.03" step="0.01" min="1"></div>
+      <div class="field"><label>ضریب حد ضرر</label><input type="number" id="stopLossMult" value="0.99" step="0.01" min="0" max="1"></div>
+      <div class="field" style="display:flex;align-items:flex-end"><button class="btn b-cyan" style="width:100%;justify-content:center" onclick="saveSettings()">💾 ذخیره تنظیمات</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="p-trade">
+  <div class="card">
+    <div class="card-h"><div class="ico">✍️</div><h2>ثبت معامله جدید</h2></div>
+    <div class="grid4">
+      <div class="field"><label>تاریخ</label><input class="date-fmt" inputmode="numeric" id="txDate" placeholder="1404-05-06"></div>
+      <div class="field"><label>نوع</label><select id="txType"><option value="خرید">خرید</option><option value="فروش">فروش</option></select></div>
+      <div class="field"><label>نماد</label><input id="txSymbol" placeholder="سینرژی"></div>
+      <div class="field"><label>تعداد</label><input class="num-fmt" inputmode="numeric" id="txQty" placeholder="۱۰۰۰"></div>
+    </div>
+    <div class="grid4" style="margin-top:12px">
+      <div class="field"><label>قیمت (ریال)</label><input class="num-fmt-dec" inputmode="decimal" id="txPrice" placeholder="3000"></div>
+      <div class="field"><label>وضعیت اولیه</label><select id="txStatus"><option value="فعال">فعال</option><option value="غیرفعال">غیرفعال</option></select></div>
+      <div class="field"><label>حد سود دستی</label><input class="num-fmt-dec" inputmode="decimal" id="txTP" placeholder="اختیاری"></div>
+      <div class="field"><label>حد ضرر دستی</label><input class="num-fmt-dec" inputmode="decimal" id="txSL" placeholder="اختیاری"></div>
+    </div>
+    <div class="row-btns">
+      <button class="btn b-green" onclick="saveTransaction()">💾 ذخیره معامله</button>
+      <button class="btn b-violet" onclick="toggleImport()">📥 ایمپورت اکسل / CSV</button>
+      <button class="btn b-ghost" onclick="seedDemo()">🎲 افزودن داده نمونه</button>
+    </div>
+    <div class="subpanel" id="importSection">
+      <div class="note n-mute">ستون‌ها: <b>تاریخ · نوع · نماد · تعداد · قیمت</b> — با یا بدون سربرگ · xlsx / xls / csv / txt · ستون «حجم انجام‌شده» جای «حجم کل» خوانده می‌شود.</div>
+      <div class="drop" id="dropZone" onclick="document.getElementById('excelFile').click()">
+        <div style="font-size:1.9rem">📂</div><p>فایل را اینجا رها کن یا کلیک کن</p>
+        <input type="file" id="excelFile" accept=".xlsx,.xls,.csv,.txt" style="display:none" onchange="handleExcelFile(this.files[0])">
+      </div>
+      <div id="importPreview" style="display:none;margin-top:14px">
+        <div class="card-h"><h2 style="font-size:.85rem">پیش‌نمایش · <span id="importCount">0</span> تراکنش</h2></div>
+        <div class="tbl-wrap" style="max-height:280px;overflow-y:auto"><table><thead><tr><th>#</th><th>تاریخ</th><th>نوع</th><th>نماد</th><th>تعداد</th><th>قیمت</th><th>وضعیت</th></tr></thead><tbody id="importBody"></tbody></table></div>
+        <div class="note n-cyan" id="importSummary" style="display:none;margin-top:12px"></div>
+        <div class="row-btns"><button class="btn b-green" onclick="confirmImport()">✅ تأیید و ثبت</button><button class="btn b-red" onclick="cancelImport()">❌ انصراف</button></div>
+      </div>
+      <div class="note n-amber" id="importWarnings" style="display:none;margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="ico">📋</div><h2>لیست معاملات</h2><span class="sub">جدیدترین در بالا</span></div>
+    <div class="warnbar" id="untaggedBar">
+      <span>🎯</span><span id="untaggedTxt"></span>
+      <span class="grow"></span>
+      <button class="btn b-xs b-amber" onclick="selectUntagged()">انتخاب همهٔ احتساب‌نشده‌ها</button>
+      <button class="btn b-xs b-ghost" onclick="filterTx('untagged')">فقط همین‌ها</button>
+    </div>
+    <div class="note n-cyan">هر فروش از <b>گران‌ترین خریدی که تا آن لحظه انجام شده</b> کم می‌شود. برای فروش‌های قدیمی که در واقع <b>سیو سود</b> بوده‌اند، از دکمهٔ 🎯 همان ردیف، از <b>ویرایش ✏️</b>، یا به‌صورت گروهی احتسابشان کن تا درصد برداشت در صفحهٔ قیمت روز درست شود.</div>
+    <div class="note n-amber" id="lotWarn" style="display:none"></div>
+    <div class="toolbar">
+      <button class="btn b-sm b-cyan" onclick="filterTx('all')">همه</button>
+      <button class="btn b-sm b-green" onclick="filterTx('خرید')">خرید</button>
+      <button class="btn b-sm b-red" onclick="filterTx('فروش')">فروش</button>
+      <button class="btn b-sm b-amber" onclick="filterTx('untagged')">🎯 احتساب‌نشده</button>
+      <button class="btn b-sm b-violet" onclick="filterTx('tagged')">سیوشده</button>
+      <div class="field" style="min-width:120px"><select id="symbolFilter" onchange="saveView();renderList()"><option value="all">همه نمادها</option></select></div>
+      <div class="field" style="min-width:150px"><select id="sortMode" onchange="saveView();renderList()">
+        <option value="date_desc">تاریخ · جدید→قدیم</option><option value="date_asc">تاریخ · قدیم→جدید</option>
+        <option value="price_desc">قیمت · زیاد→کم</option><option value="price_asc">قیمت · کم→زیاد</option>
+        <option value="qty_desc">تعداد · زیاد→کم</option><option value="rem_desc">مانده · زیاد→کم</option></select></div>
+      <div class="search"><input id="searchBox" placeholder="جستجو نماد / تاریخ / قیمت" oninput="saveView();renderList()"></div>
+      <span class="grow" style="font-size:.72rem;color:var(--mute)">موجودی: <b id="currentQty" style="color:var(--cyan)">-</b></span>
+    </div>
+    <div class="selbar" id="selBar"><b id="selCount">۰</b> ردیف انتخاب شده
+      <button class="btn b-xs b-violet" onclick="bulkTagSave(true)">🎯 احتساب سیو</button>
+      <button class="btn b-xs b-ghost" onclick="bulkTagSave(false)">لغو احتساب</button>
+      <button class="btn b-xs b-red" onclick="bulkDelete()">🗑️ حذف گروهی</button>
+      <button class="btn b-xs b-ghost" onclick="clearSel()">لغو انتخاب</button></div>
+    <div class="tbl-wrap"><table><thead><tr>
+      <th style="width:34px"><input type="checkbox" id="selAll" style="width:15px" onchange="toggleAll(this.checked)"></th>
+      <th>ردیف</th><th>تاریخ</th><th>نوع</th><th>نماد</th><th>تعداد</th><th>مانده</th><th>قیمت</th><th>موجودی تا این لحظه</th><th>حد ضرر</th><th>وضعیت</th><th style="width:132px">عملیات</th>
+    </tr></thead><tbody id="txBody"></tbody></table></div>
+    <div class="legend"><b class="risk">●</b> قرمز = بالاترین خرید فعال · نوار نارنجیِ کنار ردیف = فروشِ احتساب‌نشده · <span class="badge bg-save">سیو</span> = در هدف سیو حساب شده</div>
+  </div>
+</section>
+
+<section class="panel" id="p-cash">
+  <div class="card">
+    <div class="card-h"><div class="ico">💰</div><h2>موجودی نقدی</h2></div>
+    <div class="note n-amber">فقط <b>واریز / برداشت</b> واقعی بین بانک و کارگزاری. اگر برداشتِ سیوهای قدیمی را قبلاً دستی ثبت کرده‌ای، هنگام احتساب دوباره ثبتش نکن.</div>
+    <div class="grid3">
+      <div class="stat"><div class="lbl">تراز واریز / برداشت</div><div class="val" id="cashTotal">۰</div><div class="edge"></div></div>
+      <div class="stat"><div class="lbl">مجموع واریزها</div><div class="val pos" id="cashIn">۰</div><div class="edge"></div></div>
+      <div class="stat"><div class="lbl">مجموع برداشت‌ها</div><div class="val neg" id="cashOut">۰</div><div class="edge"></div></div>
+    </div>
+    <div class="grid4" style="margin-top:15px">
+      <div class="field"><label>تاریخ</label><input class="date-fmt" inputmode="numeric" id="cashDate" placeholder="1404-05-06"></div>
+      <div class="field"><label>نوع</label><select id="cashType"><option value="واریز">واریز</option><option value="برداشت">برداشت</option><option value="سیو سود">سیو سود</option></select></div>
+      <div class="field"><label>مبلغ (ریال)</label><input class="num-fmt" inputmode="numeric" id="cashAmount" placeholder="1,000,000"></div>
+      <div class="field"><label>توضیحات</label><input id="cashDesc" placeholder="اختیاری"></div>
+    </div>
+    <div class="row-btns"><button class="btn b-green" onclick="saveCash()">💾 ذخیره رکورد</button></div>
+  </div>
+  <div class="card">
+    <div class="card-h"><div class="ico">🧾</div><h2>تاریخچه نقدی</h2></div>
+    <div class="tbl-wrap"><table><thead><tr><th>#</th><th>تاریخ</th><th>نوع</th><th>مبلغ</th><th>توضیحات</th><th>عملیات</th></tr></thead><tbody id="cashBody"></tbody></table></div>
+  </div>
+</section>
+
+<section class="panel" id="p-day">
+  <div class="card">
+    <div class="card-h"><div class="ico">📡</div><h2>سود و زیان با قیمت روز</h2><div class="spacer"></div><button class="btn b-sm b-ghost" onclick="resetAllSaves()">↺ بازنشانی همهٔ هدف‌ها</button></div>
+    <div class="grid4">
+      <div class="stat"><div class="lbl">ارزش سهام</div><div class="val" id="stockValue">۰</div><div class="edge"></div></div>
+      <div class="stat"><div class="lbl">ارزش پرتفوی</div><div class="val" id="portfolioValue">۰</div><div class="edge"></div></div>
+      <div class="stat"><div class="lbl">سود / زیان باز</div><div class="val" id="unrealizedPnl">۰</div><div class="edge"></div></div>
+      <div class="stat"><div class="lbl">برداشت از سود (کل)</div><div class="val" style="color:#c4b5fd" id="takenPctAll">۰٪</div><div class="edge"></div></div>
+    </div>
+    <div class="plan-big" style="margin-top:12px"><i id="allPlanBar" style="width:0%"></i></div>
+    <div class="legend" id="allPlanTxt" style="margin-top:2px"></div>
+    <div class="note n-violet" style="margin-top:12px">
+      🎯 هدف سیو در لحظهٔ ورود قیمت روز <b>قفل</b> می‌شود. فروش‌های قدیمی که سیو بوده‌اند ولی «فروش معمولی» ثبت شده‌اند را با 🎯 یا از <b>ویرایش معامله</b> احتساب کن؛ آن‌وقت <b>برداشته‌شده</b> و <b>درصد</b> واقعی می‌شود و <b>باقی‌ماندهٔ هدف</b> کم می‌شود — بدون اینکه هدف از نو ساخته شود.
+    </div>
+    <div class="toolbar">
+      <div class="field" style="width:160px"><input id="newSymbolInput" placeholder="نماد جدید"></div>
+      <button class="btn b-sm b-cyan" onclick="addDayPrice()">+ افزودن</button>
+      <span id="zeroCountLabel" style="font-size:.7rem;color:var(--amber)"></span>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr>
+      <th>نماد</th><th>موجودی</th><th>قیمت روز</th><th>سر‌به‌سر</th><th>سود / زیان باز</th><th>هدف سیو</th><th>برداشته‌شده</th><th>باقی‌ماندهٔ هدف</th><th>پیشنهاد فروش</th><th style="width:126px">عملیات</th>
+    </tr></thead><tbody id="pnlBody"></tbody></table></div>
+    <div class="legend" id="freeCashLine"></div>
+    <div class="legend">هدف سیو = سود بازِ لحظهٔ قفل · برداشته‌شده = جمع نقدِ فروش‌های برچسب‌خورده · باقی‌مانده = هدف − برداشته · پیشنهاد = کف(باقی‌مانده ÷ (قیمت روز × (۱−کارمزد)))</div>
+  </div>
+  <div class="card">
+    <div class="card-h"><div class="ico">🍩</div><h2>ترکیب پرتفوی</h2><span class="sub">بر پایهٔ ارزش روز</span></div>
+    <div class="viz">
+      <div class="donut-wrap"><svg id="donut" width="230" height="230" viewBox="0 0 230 230"></svg><div class="donut-center"><b id="donutTotal">۰</b><span>ارزش کل سهام</span></div></div>
+      <div><div class="legend-list" id="donutLegend"></div><div class="bars" id="pnlBars"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="p-fee">
+  <div class="card">
+    <div class="card-h"><div class="ico">🧪</div><h2>کشف ضریب کارمزد کارگزاری</h2></div>
+    <div class="note n-mute">در خرید مبلغ پرداختی بیشتر از (تعداد×قیمت) و در فروش مبلغ دریافتی کمتر است؛ اختلاف همان کارمزد است.</div>
+    <div class="grid4">
+      <div class="field"><label>تعداد سهم</label><input class="num-fmt" inputmode="numeric" id="testQty" placeholder="1,000"></div>
+      <div class="field"><label>قیمت هر سهم</label><input class="num-fmt" inputmode="numeric" id="testPrice" placeholder="26,240"></div>
+      <div class="field"><label>نوع معامله</label><select id="testType"><option value="خرید">خرید (پرداختی)</option><option value="فروش">فروش (دریافتی)</option></select></div>
+      <div class="field"><label>مبلغ نهایی صورتحساب</label><input class="num-fmt" inputmode="numeric" id="testTotal" placeholder="26,271,488"></div>
+    </div>
+    <div class="row-btns"><button class="btn b-cyan" onclick="runCommissionTest()">🧮 محاسبه کارمزد</button></div>
+    <div class="grid4" style="margin-top:15px">
+      <div class="stat"><div class="lbl">ارزش پایه</div><div class="val" id="tBase">۰</div><div class="edge"></div></div>
+      <div class="stat"><div class="lbl">مبلغ کارمزد</div><div class="val" id="tComm">۰</div><div class="edge"></div></div>
+      <div class="stat"><div class="lbl">ضریب واقعی</div><div class="val" style="color:var(--amber)" id="tRate">۰</div><div class="edge"></div></div>
+      <div class="stat"><div class="lbl">ضریب فعلی</div><div class="val" id="tCur">۰</div><div class="edge"></div></div>
+    </div>
+    <div class="note n-cyan" id="tMsg" style="margin-top:14px">پس از محاسبه، مقایسه اینجا نمایش داده می‌شود.</div>
+    <div class="row-btns"><button class="btn b-green" onclick="applyTestRate()">✅ اعمال در تنظیمات</button></div>
+  </div>
+</section>
+
+<section class="panel" id="p-backup">
+  <div class="card">
+    <div class="card-h"><div class="ico">💾</div><h2>پشتیبان و همگام‌سازی</h2></div>
+    <div class="sec s-red" id="recoverySec" style="display:none"><h3>♻️ نسخهٔ نجات</h3>
+      <div class="note n-mute" id="recoveryInfo" style="margin-bottom:10px"></div>
+      <div class="row-btns" style="margin-top:0"><button class="btn b-sm b-amber" onclick="restoreRecovery()">♻️ بازیابی نسخهٔ نجات</button><button class="btn b-sm b-ghost" onclick="dropRecovery()">پاک کردن</button></div>
+    </div>
+    <div class="sec s-violet"><h3>🔐 کد رمز</h3>
+      <div class="grid2">
+        <div class="field"><label>کد رمز فعلی</label><input type="password" id="backupPassword" placeholder="پیش‌فرض 1234"></div>
+        <div class="field" style="display:flex;align-items:flex-end;gap:8px"><button class="btn b-blue" onclick="verifyPassword('download')">🔓 دانلود</button><button class="btn b-amber" onclick="verifyPassword('restore')">🔓 بازیابی</button></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div class="field"><label>رمز جدید</label><input type="password" id="newPassword" placeholder="رمز تازه"></div>
+        <div class="field" style="display:flex;align-items:flex-end"><button class="btn b-ghost" onclick="changePassword()">ذخیره رمز</button></div>
+      </div>
+    </div>
+    <div class="sec s-cyan"><h3>☁️ Google Drive</h3>
+      <div class="field"><label>آدرس Web App (/exec)</label><input id="webAppUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
+      <div class="row-btns"><button class="btn b-sm b-ghost" onclick="saveWebApp()">ذخیره آدرس</button><button class="btn b-sm b-green" onclick="uploadToDrive()">☁️ ذخیره در Drive</button><button class="btn b-sm b-blue" onclick="downloadFromDrive()">📥 دریافت از Drive</button></div>
+    </div>
+    <div class="sec s-green"><h3>🔌 انتقال آفلاین</h3>
+      <div class="row-btns" style="margin-top:0"><button class="btn b-sm b-violet" onclick="exportTransfer()">📤 ساخت فایل انتقال</button></div>
+      <div class="drop" style="margin-top:11px;padding:16px" onclick="document.getElementById('transferFile').click()"><div style="font-size:1.4rem">📥</div><p>فایل انتقال را رها یا کلیک کن</p><input type="file" id="transferFile" accept=".json" style="display:none" onchange="importTransferFile(this.files[0])"></div>
+      <div class="row-btns"><button class="btn b-sm b-violet" onclick="makeTransferCode()">🔗 ساخت کد</button><button class="btn b-sm b-ghost" onclick="copyTransferCode()">📋 کپی کد</button></div>
+      <textarea id="transferCodeOut" style="margin-top:9px;height:64px" readonly placeholder="کد خروجی"></textarea>
+      <textarea id="transferCodeIn" style="margin-top:8px;height:64px" placeholder="کد دریافتی را اینجا بچسبان"></textarea>
+      <div class="row-btns"><button class="btn b-sm b-green" onclick="readTransferCode()">✅ خواندن و ادغام</button></div>
+    </div>
+    <div class="sec s-amber"><h3>📶 سرور محلی (Wi-Fi)</h3>
+      <div class="field"><label>آدرس سرور</label><input id="lanUrl" placeholder="http://192.168.1.5:8765 — خالی = همان مبدأ"></div>
+      <div class="row-btns"><button class="btn b-sm b-ghost" onclick="saveLanUrl()">ذخیره</button><button class="btn b-sm b-green" onclick="uploadLan()">📤 ارسال</button><button class="btn b-sm b-blue" onclick="downloadLan()">📥 دریافت و ادغام</button></div>
+    </div>
+    <div class="sec s-magenta"><h3>📱 انتقال با QR</h3>
+      <div class="row-btns" style="margin-top:0"><button class="btn b-sm b-magenta" onclick="generateMultiQR()">🎨 تولید QR</button><button class="btn b-sm b-ghost" id="btnDownloadAllQR" style="display:none" onclick="downloadAllQR()">💾 دانلود همه</button></div>
+      <div id="qrDisplay" style="display:none;margin-top:12px"><div id="qrcodeContainer" style="display:flex;flex-wrap:wrap;gap:13px;justify-content:center"></div><div class="legend" id="qrInfo"></div></div>
+      <div class="row-btns"><button class="btn b-sm b-green" onclick="startQRScan()">📷 اسکن</button><button class="btn b-sm b-red" id="btnStopScan" style="display:none" onclick="stopQRScan()">⏹ توقف</button></div>
+      <div id="qr-reader" style="width:100%;max-width:380px;margin:13px auto;border-radius:12px;overflow:hidden"></div>
+      <div class="legend" id="qrScanProgress" style="text-align:center"></div><div id="qrScanResult"></div>
+    </div>
+    <div class="card-h" style="margin-top:16px"><h2 style="font-size:.85rem">خروجی و پاک‌سازی</h2></div>
+    <div class="row-btns" style="margin-top:0">
+      <button class="btn b-sm b-violet" onclick="exportCSV()">📤 CSV معاملات</button>
+      <button class="btn b-sm b-blue" onclick="downloadBackup()">📥 پشتیبان JSON</button>
+      <button class="btn b-sm b-red" onclick="clearAllData()">🗑️ حذف همه داده‌ها</button>
+    </div>
+    <div class="drop" style="margin-top:12px;padding:16px" onclick="document.getElementById('backupFile').click()"><div style="font-size:1.4rem">📁</div><p>بازیابی فایل JSON</p><input type="file" id="backupFile" accept=".json" style="display:none" onchange="restoreBackup(this.files[0])"></div>
+  </div>
+</section>
+</main>
+
+<div class="scrim" id="scrim" onclick="closeAll()"></div>
+
+<div class="modal" id="editModal"><div class="modal-box">
+  <h3>✏️ ویرایش معامله <button class="x" onclick="closeEditModal()">×</button></h3>
+  <div class="grid2">
+    <div class="field"><label>تاریخ</label><input class="date-fmt" inputmode="numeric" id="editDate"></div>
+    <div class="field"><label>نوع</label><select id="editType" onchange="editTypeChanged()"><option value="خرید">خرید</option><option value="فروش">فروش</option></select></div>
+    <div class="field"><label>نماد</label><input id="editSymbol" oninput="editSavePreview()"></div>
+    <div class="field"><label>تعداد</label><input class="num-fmt" inputmode="numeric" id="editQty" oninput="editSavePreview()"></div>
+    <div class="field"><label>قیمت</label><input class="num-fmt-dec" inputmode="decimal" id="editPrice" oninput="editSavePreview()"></div>
+    <div class="field"><label>وضعیت</label><select id="editStatus"><option value="فعال">فعال</option><option value="غیرفعال">غیرفعال</option></select></div>
+    <div class="field"><label>حد سود دستی</label><input class="num-fmt-dec" inputmode="decimal" id="editTP"></div>
+    <div class="field"><label>حد ضرر دستی</label><input class="num-fmt-dec" inputmode="decimal" id="editSL"></div>
+  </div>
+
+  <div class="save-panel" id="editSavePanel" style="display:none">
+    <h4>🎯 احتساب این فروش در سیو سود</h4>
+    <div class="sw-row">
+      <span class="txt">این فروش، <b>برداشت سود (سیو سود)</b> بوده است</span>
+      <button type="button" class="sw" id="editIsSave" role="switch" aria-checked="false" onclick="toggleEditSave()"><i></i></button>
+    </div>
+    <div class="sw-row" id="editCashRow">
+      <span class="txt">رکورد برداشت نقدی هم بساز / به‌روزرسانی کن<br><span style="font-size:.66rem;color:var(--faint)">اگر برداشتِ این سیو را قبلاً دستی در تب نقدی ثبت کرده‌ای، خاموش بگذار تا دوبار حساب نشود.</span></span>
+      <button type="button" class="sw" id="editMakeCash" role="switch" aria-checked="false" onclick="toggleEditCash()"><i></i></button>
+    </div>
+    <div class="mini-kv">
+      <div><span>نقد این فروش</span><b id="esCash" class="pos">۰</b></div>
+      <div><span>برداشته‌شده پس از ذخیره</span><b id="esTaken" style="color:#c4b5fd">۰</b></div>
+      <div><span>باقی‌ماندهٔ هدف</span><b id="esRemain">۰</b></div>
+    </div>
+    <div class="legend" id="esNote" style="margin-top:8px"></div>
+  </div>
+
+  <button class="btn b-green" style="width:100%;justify-content:center;margin-top:14px" onclick="saveEdit()">💾 ذخیره تغییرات</button>
+</div></div>
+
+<div class="modal" id="cashEditModal"><div class="modal-box">
+  <h3>✏️ ویرایش رکورد نقدی <button class="x" onclick="closeCashEdit()">×</button></h3>
+  <div class="grid2">
+    <div class="field"><label>تاریخ</label><input class="date-fmt" inputmode="numeric" id="ceDate"></div>
+    <div class="field"><label>نوع</label><select id="ceType"><option value="واریز">واریز</option><option value="برداشت">برداشت</option><option value="سیو سود">سیو سود</option></select></div>
+    <div class="field"><label>مبلغ (ریال)</label><input class="num-fmt" inputmode="numeric" id="ceAmount"></div>
+    <div class="field"><label>توضیحات</label><input id="ceDesc"></div>
+  </div>
+  <button class="btn b-green" style="width:100%;justify-content:center;margin-top:12px" onclick="saveCashEdit()">💾 ذخیره</button>
+</div></div>
+
+<div class="modal" id="saveModal"><div class="modal-box">
+  <h3>🎯 ثبت پلهٔ سیو سود · <span id="svSym"></span> <button class="x" onclick="closeSaveModal()">×</button></h3>
+  <div class="note n-violet" id="svInfo"></div>
+  <div class="plan-big"><i id="svPlanBar" style="width:0%"></i></div>
+  <div class="legend" id="svPlanTxt" style="margin-top:0"></div>
+  <div class="grid2" style="margin-top:12px">
+    <div class="field"><label>تاریخ فروش</label><input class="date-fmt" inputmode="numeric" id="svDate"></div>
+    <div class="field"><label>قیمت فروش (ریال)</label><input class="num-fmt-dec" inputmode="decimal" id="svPrice" oninput="svPreview()"></div>
+  </div>
+  <div class="field" style="margin-top:12px">
+    <label>تعداد این پله — لازم نیست همهٔ پیشنهاد را بفروشی</label>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn b-sm b-ghost" onclick="svStep(-100)">−۱۰۰</button>
+      <button class="btn b-sm b-ghost" onclick="svStep(-1)">−۱</button>
+      <input class="num-fmt" inputmode="numeric" id="svQty" oninput="svPreview()" style="text-align:center;font-weight:800;font-size:1rem">
+      <button class="btn b-sm b-ghost" onclick="svStep(1)">+۱</button>
+      <button class="btn b-sm b-ghost" onclick="svStep(100)">+۱۰۰</button>
+    </div>
+    <input type="range" id="svRange" min="0" max="100" step="1" value="0" oninput="svFromRange()" style="margin-top:10px">
+    <div class="chips">
+      <button class="pchip" onclick="svPct(25)">۲۵٪ پیشنهاد</button>
+      <button class="pchip" onclick="svPct(50)">۵۰٪ پیشنهاد</button>
+      <button class="pchip" onclick="svPct(75)">۷۵٪ پیشنهاد</button>
+      <button class="pchip" onclick="svPct(100)">۱۰۰٪ پیشنهاد</button>
+      <button class="pchip" onclick="svAll()">همهٔ موجودی</button>
+    </div>
+  </div>
+  <div class="grid4" style="margin-top:14px">
+    <div class="stat"><div class="lbl">کارمزد این پله</div><div class="val" id="svFeeView">۰</div><div class="edge"></div></div>
+    <div class="stat"><div class="lbl">نقد دریافتی</div><div class="val pos" id="svCash">۰</div><div class="edge"></div></div>
+    <div class="stat"><div class="lbl">باقی‌ماندهٔ هدف</div><div class="val" style="color:#c4b5fd" id="svRemain">۰</div><div class="edge"></div></div>
+    <div class="stat"><div class="lbl">پیشنهاد بعدی</div><div class="val" id="svAfter">۰</div><div class="edge"></div></div>
+  </div>
+  <div class="note n-mute" style="margin-top:12px" id="svNote"></div>
+  <div class="row-btns"><button class="btn b-green" id="svConfirm" onclick="confirmSave()">✅ ثبت این پله</button><button class="btn b-ghost" onclick="closeSaveModal()">انصراف</button></div>
+</div></div>
+
+<aside class="drawer" id="drawer">
+  <div class="drawer-h"><div class="ico">🔎</div><h3 id="drawerTitle">جزئیات</h3><button class="x" style="margin-inline-start:auto" onclick="closeDrawer()">×</button></div>
+  <div class="drawer-b" id="drawerBody"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+<div class="undo" id="undoBar"><span id="undoLabel"></span><button class="btn b-xs b-amber" onclick="doUndo()">↩️ بازگردانی</button><button class="btn b-xs b-ghost" onclick="hideUndo()">✕</button></div>
+
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+'use strict';
+var WEBAPP='https://script.google.com/macros/s/AKfycbybdBCU6jAfm0sGiq6TuUaBdUMik0JZKtIRvF7M8s7yQE9WbALVQ25fKLXPMq2LHcBr/exec';
+var PAL=['#22d3ee','#4ade80','#8b5cf6','#ffb020','#ff2ea6','#3b82f6','#a3e635','#ff3b5c'];
+var currentUser='user1',data={},pendingImport=[],editingId=null,cashEditingId=null,currentFilter='all';
+var xlsxLoaded=false,lastTestRate=null,qrScanner=null,chunks={},chunkTotal=0;
+var lotWarning='',lastCreatedId=null,lastAlloc=null,selection={},undoSnap=null,undoTimer=null;
+var soundOn=true,actx=null,saveSym=null,drawerId=null,svSug=0,planDirty=false;
+
+function each(l,f){for(var i=0;i<l.length;i++)f(l[i],i);}
+function pad2(x){x=String(x);return x.length<2?'0'+x:x;}
+function toEn(s){return String(s).replace(/[۰-۹]/g,function(d){return String(d.charCodeAt(0)-1776);}).replace(/[٠-٩]/g,function(d){return String(d.charCodeAt(0)-1632);});}
+function t2(x){return Math.round(Number(x)*100)/100;}
+function fI(n){if(n===null||n===undefined||isNaN(n))return '-';return Math.round(Number(n)).toLocaleString('fa-IR');}
+function fP(n){if(n===null||n===undefined||isNaN(n))return '-';return t2(n).toLocaleString('fa-IR',{maximumFractionDigits:2});}
+function fE(n){return Math.round(Number(n)).toLocaleString('en-US');}
+function fEP(n){return t2(n).toLocaleString('en-US',{maximumFractionDigits:2});}
+function rN(id){var el=document.getElementById(id);if(!el)return NaN;var s=toEn(String(el.value)).replace(/[^0-9.\-]/g,'');if(s===''||s==='.'||s==='-')return NaN;return parseFloat(s);}
+function toNum(v){if(v===null||v===undefined)return NaN;if(typeof v==='number')return v;var s=toEn(String(v)).replace(/[,،٬\s]/g,'').trim();return s?parseFloat(s):NaN;}
+function dk(d){var s=toEn(String(d==null?'':d)).trim(),p=s.split(/[-\/]/);if(p.length===3){var y=parseInt(p[0],10),m=parseInt(p[1],10),dd=parseInt(p[2],10);if(!isNaN(y)&&!isNaN(m)&&!isNaN(dd))return y*10000+m*100+dd;}return 0;}
+function nd(d){if(!d&&d!==0)return '';d=toEn(String(d)).trim();if(/^\d+$/.test(d)&&parseInt(d,10)>40000)return d;var p=d.split(/[-\/]/);if(p.length===3){var a=p[0].trim(),b=p[1].trim(),c=p[2].trim();if(a.length===4)return a+'-'+pad2(b)+'-'+pad2(c);if(c.length===4)return c+'-'+pad2(b)+'-'+pad2(a);}return d;}
+function today(){var d=new Date();return (d.getFullYear()-621)+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());}
+function uid(){return 'xxxxxxxx-xxxx-4xxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return (c==='x'?r:(r&0x3|0x8)).toString(16);});}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function toast(m,t){var e=document.getElementById('toast');e.textContent=m;e.className='toast on '+(t||'ok');clearTimeout(e._t);e._t=setTimeout(function(){e.className='toast '+(t||'ok');},4600);}
+function tick(f,d){if(!soundOn)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();var o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.value=f||660;g.gain.value=.05;o.connect(g);g.connect(actx.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,actx.currentTime+(d||.09));o.stop(actx.currentTime+(d||.09)+.02);}catch(e){}}
+window.toggleSound=function(){soundOn=!soundOn;document.getElementById('soundBtn').textContent=soundOn?'🔊':'🔇';localStorage.setItem('snd',soundOn?'1':'0');if(soundOn)tick(880,.08);toast(soundOn?'صدا روشن شد':'صدا خاموش شد','info');};
+function offerUndo(l,s){undoSnap=s;document.getElementById('undoLabel').textContent=l;document.getElementById('undoBar').classList.add('on');clearTimeout(undoTimer);undoTimer=setTimeout(hideUndo,9000);}
+window.doUndo=function(){if(undoSnap){data=undoSnap;undoSnap=null;norm();sortTx();sync();save();renderAll();toast('↩️ بازگردانی شد','ok');tick(520,.1);}hideUndo();};
+window.hideUndo=function(){undoSnap=null;document.getElementById('undoBar').classList.remove('on');clearTimeout(undoTimer);};
+
+document.addEventListener('input',function(e){
+  var el=e.target;if(!el||!el.classList)return;
+  if(el.classList.contains('num-fmt')){var r=toEn(el.value).replace(/[^0-9]/g,'');el.value=r===''?'':Number(r).toLocaleString('en-US');}
+  else if(el.classList.contains('num-fmt-dec')){var s=toEn(el.value),p=s.split('.'),i=p[0].replace(/[^0-9]/g,''),d=p.length>1?p[1].replace(/[^0-9]/g,'').slice(0,2):null;var o=i===''?'':Number(i).toLocaleString('en-US');if(d!==null)o+='.'+d;el.value=o;}
+  else if(el.classList.contains('date-fmt')){var v=toEn(el.value).replace(/[^0-9]/g,'').slice(0,8),o=v;if(v.length>4)o=v.slice(0,4)+'-'+v.slice(4);if(v.length>6)o=v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6);el.value=o;}
+});
+
+/* ---------- storage ---------- */
+function defData(){return{v:5,transactions:[],deposits:[],dayPrices:{},breakEvens:{},hiddenSymbols:{},saveAdjust:{},savePlan:{}};}
+function norm(){
+  data.transactions=data.transactions||[];data.deposits=data.deposits||[];
+  data.dayPrices=data.dayPrices||{};data.breakEvens=data.breakEvens||{};
+  data.hiddenSymbols=data.hiddenSymbols||{};data.saveAdjust=data.saveAdjust||{};data.savePlan=data.savePlan||{};
+}
+function migrate(){
+  if(data.savedProfit){
+    for(var s in data.savedProfit){
+      var v=Number(data.savedProfit[s])||0;if(v<=0)continue;
+      var tagged=data.transactions.some(function(x){return x.symbol===s&&x.type==='فروش'&&x.saveTag;});
+      if(!tagged)data.saveAdjust[s]=(Number(data.saveAdjust[s])||0)+v;
+    }
+    delete data.savedProfit;
+  }
+  if(data.saveLog)delete data.saveLog;
+  data.v=5;
+}
+function load(){try{var r=localStorage.getItem('stockApp_'+currentUser);data=r?JSON.parse(r):defData();}catch(e){data=defData();}norm();migrate();}
+function save(){localStorage.setItem('stockApp_'+currentUser,JSON.stringify(data));}
+function cfg(){return{comm:parseFloat(localStorage.getItem('commissionRate')||'0.0012'),tp:parseFloat(localStorage.getItem('takeProfitMult')||'1.03'),sl:parseFloat(localStorage.getItem('stopLossMult')||'0.99')};}
+window.saveSettings=function(){localStorage.setItem('commissionRate',document.getElementById('commissionRate').value);localStorage.setItem('takeProfitMult',document.getElementById('takeProfitMult').value);localStorage.setItem('stopLossMult',document.getElementById('stopLossMult').value);toast('تنظیمات ذخیره شد','ok');tick(760,.08);renderAll();};
+function saveView(){localStorage.setItem('view_'+currentUser,JSON.stringify({f:currentFilter,s:document.getElementById('symbolFilter').value,o:document.getElementById('sortMode').value,q:document.getElementById('searchBox').value}));}
+window.saveView=saveView;
+function restoreView(){try{var v=JSON.parse(localStorage.getItem('view_'+currentUser)||'null');if(v){currentFilter=v.f||'all';document.getElementById('sortMode').value=v.o||'date_desc';document.getElementById('searchBox').value=v.q||'';return v.s||'all';}}catch(e){}return 'all';}
+
+/* ---------- safety ---------- */
+function isEmptyLedger(){return data.transactions.length===0&&data.deposits.length===0&&Object.keys(data.dayPrices).length===0&&Object.keys(data.breakEvens).length===0;}
+function stashRecovery(reason){
+  try{if(isEmptyLedger())return;localStorage.setItem('recovery_'+currentUser,JSON.stringify({at:Date.now(),reason:reason||'auto',data:clone(data)}));}catch(e){}
+  renderRecovery();
+}
+function renderRecovery(){
+  var sec=document.getElementById('recoverySec');if(!sec)return;
+  var raw=localStorage.getItem('recovery_'+currentUser);
+  if(!raw){sec.style.display='none';return;}
+  try{var r=JSON.parse(raw),d=new Date(r.at),n=(r.data&&r.data.transactions)?r.data.transactions.length:0;
+    document.getElementById('recoveryInfo').innerHTML='عکس فوریِ <b>'+fI(n)+'</b> معامله · '+d.toLocaleString('fa-IR')+' · علت: '+esc(r.reason||'auto');
+    sec.style.display='block';}catch(e){sec.style.display='none';}
+}
+window.restoreRecovery=function(){
+  var raw=localStorage.getItem('recovery_'+currentUser);if(!raw){toast('نسخهٔ نجاتی نیست','warn');return;}
+  if(!confirm('دفتر فعلی با نسخهٔ نجات جایگزین شود؟'))return;
+  try{var r=JSON.parse(raw),snap=clone(data);data=r.data||defData();norm();migrate();sortTx();sync();save();renderAll();toast('♻️ بازیابی شد','ok');offerUndo('بازیابی نجات',snap);}catch(e){toast('خوانده نشد','err');}
+};
+window.dropRecovery=function(){if(!confirm('نسخهٔ نجات پاک شود؟'))return;localStorage.removeItem('recovery_'+currentUser);renderRecovery();toast('پاک شد','warn');};
+
+/* ---------- allocation ---------- */
+function allocate(ev){
+  var st={},i;for(i=0;i<ev.length;i++){var e=ev[i];if(e.type==='خرید')st[e.id]={sold:0,status:'فعال'};}
+  var ord=ev.map(function(e,x){return{e:e,i:x};});
+  ord.sort(function(a,b){var ka=dk(a.e.date),kb=dk(b.e.date);if(ka!==kb)return ka-kb;var ca=a.e.createdAt||0,cb=b.e.createdAt||0;if(ca!==cb)return ca-cb;if(a.e.type!==b.e.type)return a.e.type==='خرید'?-1:1;return a.i-b.i;});
+  var pool=[],frames=[],short=0,cons={},src={};
+  for(i=0;i<ord.length;i++){
+    var e=ord[i].e,taken=null,sh=0;
+    if(e.type==='خرید')pool.push(e);
+    else if(e.type==='فروش'){
+      var sym=e.symbol;
+      var c=pool.filter(function(b){var s=st[b.id];return b.symbol===sym&&s.status==='فعال'&&(b.quantity-s.sold)>0;});
+      c.sort(function(a,b){if(b.price!==a.price)return b.price-a.price;var ka=dk(a.date),kb=dk(b.date);if(ka!==kb)return ka-kb;return(a.createdAt||0)-(b.createdAt||0);});
+      var rem=e.quantity;taken=[];
+      for(var j=0;j<c.length&&rem>0;j++){
+        var b=c[j],s=st[b.id],av=b.quantity-s.sold,sd=Math.min(av,rem);
+        s.sold+=sd;rem-=sd;if(s.sold>=b.quantity)s.status='غیرفعال';
+        taken.push({buyId:b.id,date:b.date,price:b.price,qty:sd});
+        (cons[b.id]=cons[b.id]||[]).push({sellId:e.id,date:e.date,price:e.price,qty:sd});
+      }
+      src[e.id]=taken;sh=rem;if(rem>0)short+=rem;
+    }
+    var snap=pool.map(function(b){var s=st[b.id];return{id:b.id,date:b.date,price:b.price,quantity:b.quantity,sold:s.sold,remaining:b.quantity-s.sold,status:s.status,symbol:b.symbol};});
+    var hold={};pool.forEach(function(b){var s=st[b.id];hold[b.symbol]=(hold[b.symbol]||0)+(b.quantity-s.sold);});
+    frames.push({event:e,lots:snap,holdings:hold,taken:taken,short:sh});
+  }
+  return{state:st,frames:frames,shortfall:short,consumers:cons,sources:src};
+}
+function sync(){
+  var r=allocate(data.transactions);lastAlloc=r;
+  for(var i=0;i<data.transactions.length;i++){var t=data.transactions[i];if(t.type==='خرید'){var s=r.state[t.id];t.soldQty=s?s.sold:0;t.status=s?s.status:'فعال';}}
+  lotWarning=r.shortfall>0?('⚠️ '+fI(r.shortfall)+' سهم از فروش‌ها خریدِ متناظرِ انجام‌شده تا آن لحظه ندارند — تاریخ‌ها را بررسی کن.'):'';
+}
+function sortTx(){data.transactions.sort(function(a,b){var ka=dk(a.date),kb=dk(b.date);if(ka!==kb)return ka-kb;return(a.createdAt||0)-(b.createdAt||0);});}
+function qtyOf(s){var q=0;for(var i=0;i<data.transactions.length;i++){var t=data.transactions[i];if(t.symbol===s)q+=(t.type==='خرید'?t.quantity:-t.quantity);}return q;}
+function allQty(){var m={};for(var i=0;i<data.transactions.length;i++){var t=data.transactions[i];m[t.symbol]=(m[t.symbol]||0)+(t.type==='خرید'?t.quantity:-t.quantity);}return m;}
+function netInv(s){var n=0;for(var i=0;i<data.transactions.length;i++){var t=data.transactions[i];if(t.symbol===s)n+=-(t.tradeValue||0);}return n;}
+function buyQtyOf(s){var q=0;data.transactions.forEach(function(t){if(t.symbol===s&&t.type==='خرید')q+=t.quantity;});return q;}
+function buyCostOf(s){var c=0;data.transactions.forEach(function(t){if(t.symbol===s&&t.type==='خرید')c+=Math.abs(t.tradeValue||0);});return Math.round(c);}
+function sellsOf(s){return data.transactions.filter(function(t){return t.symbol===s&&t.type==='فروش';});}
+function untaggedOf(s){return sellsOf(s).filter(function(t){return !t.saveTag;});}
+function allUntagged(){return data.transactions.filter(function(t){return t.type==='فروش'&&!t.saveTag;});}
+function takenOf(s){var t=0;data.transactions.forEach(function(x){if(x.symbol===s&&x.type==='فروش'&&x.saveTag)t+=(x.tradeValue||0);});return Math.max(0,t+(Number(data.saveAdjust[s])||0));}
+function tranchesOf(s){return data.transactions.filter(function(x){return x.symbol===s&&x.type==='فروش'&&x.saveTag;}).map(function(x){return{date:x.date,qty:x.quantity,price:x.price,amount:x.tradeValue};});}
+function hiBuy(){var m={};for(var i=0;i<data.transactions.length;i++){var t=data.transactions[i];if(t.type==='خرید'&&t.status==='فعال'&&(t.quantity-(t.soldQty||0))>0&&(!m[t.symbol]||t.price>m[t.symbol]))m[t.symbol]=t.price;}return m;}
+function sl(p,m){return Math.ceil(p*m);} function tp(p,m){return Math.round(p*m);}
+function mkTx(date,type,symbol,qty,price,status,tpm,slm){
+  var c=cfg(),base=price*qty,fee=Math.round(base*c.comm*100)/100,isB=type==='خرید';
+  return{id:uid(),createdAt:Date.now(),date:date,type:type,symbol:symbol,quantity:qty,price:t2(price),
+    status:isB?(status||'فعال'):'',soldQty:0,tradeValue:Math.round((isB?-(base+fee):(base-fee))*100)/100,commission:fee,
+    takeProfit:isB?tp(price,c.tp):null,takeProfitManual:isB&&!isNaN(tpm)?t2(tpm):null,
+    stopLoss:isB?sl(price,c.sl):null,stopLossManual:isB&&!isNaN(slm)?t2(slm):null};
+}
+function beOf(s,q){var man=Number(data.breakEvens[s]||0);if(man>0)return man;return q>0?netInv(s)/q:0;}
+function openPnl(s,q,dp,be){return (q>0&&be>0&&dp>0)?q*(dp-be):0;}
+
+/* ---------- locked target; retro-tagging never re-anchors ---------- */
+function planOf(s,q,dp,be){
+  var man=Number(data.breakEvens[s]||0),buys=buyQtyOf(s),bcost=buyCostOf(s),taken=takenOf(s);
+  var cur={};sellsOf(s).forEach(function(t){cur[t.id]=!!t.saveTag;});
+  var p=data.savePlan[s];
+  if(p&&p.price>0&&!p.tags){p.tags=cur;p.bcost=bcost;planDirty=true;}
+  var reanchor=false;
+  if(!p||!(p.price>0)||p.man!==man||p.buys!==buys||p.bcost!==bcost||!p.tags)reanchor=true;
+  if(!reanchor){
+    for(var id in p.tags){if(!(id in cur)&&p.tags[id]===false){reanchor=true;break;}}
+    if(!reanchor)for(var id2 in cur){if(!(id2 in p.tags)&&cur[id2]===false){reanchor=true;break;}}
+  }
+  if(reanchor){
+    p={price:dp>0?dp:0,amount:openPnl(s,q,dp,be)+taken,man:man,buys:buys,bcost:bcost,tags:cur};
+    data.savePlan[s]=p;planDirty=true;
+  }else{
+    var ch=false;
+    for(var a in cur){if(p.tags[a]!==cur[a]){p.tags[a]=cur[a];ch=true;}}
+    for(var b in p.tags){if(!(b in cur)){delete p.tags[b];ch=true;}}
+    if(ch)planDirty=true;
+  }
+  var target=p.price>0?p.amount+q*(dp-p.price):openPnl(s,q,dp,be);
+  target=Math.max(0,target);
+  var remain=q>0?Math.max(0,target-taken):0;
+  return{plan:p,target:target,taken:taken,remain:remain};
+}
+function suggestOf(s,q,dp,be){
+  var i=planOf(s,q,dp,be);
+  if(i.remain<=0||dp<=0||q<=0)return 0;
+  return Math.min(q,Math.floor(i.remain/(dp*(1-cfg().comm))));
+}
+
+/* ---------- tabs ---------- */
+window.showTab=function(n,el){
+  if(!document.getElementById('p-'+n))n='calc';
+  each(document.querySelectorAll('.panel'),function(p){p.classList.remove('on');});
+  each(document.querySelectorAll('.tab'),function(t){t.classList.remove('on');});
+  document.getElementById('p-'+n).classList.add('on');
+  if(el)el.classList.add('on');else{var b=document.querySelector('.tab[data-p="'+n+'"]');if(b)b.classList.add('on');}
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(n==='trade')renderList();if(n==='cash')renderCash();if(n==='day')renderPnl();if(n==='backup')renderRecovery();
+  localStorage.setItem('tab_'+currentUser,n);
+};
+window.switchUser=function(u){currentUser=u;document.getElementById('u1').classList.toggle('on',u==='user1');document.getElementById('u2').classList.toggle('on',u==='user2');bootUser();toast('کاربر فعال: '+(u==='user1'?'کاربر ۱':'کاربر ۲'),'info');};
+window.toggleImport=function(){document.getElementById('importSection').classList.toggle('on');};
+window.toggleLots=function(s){var e=document.getElementById('lots-'+s);if(e)e.style.display=e.style.display==='none'?'':'none';};
+window.gotoUntagged=function(sym){
+  currentFilter='untagged';
+  updateFilter(sym);document.getElementById('symbolFilter').value=sym;
+  saveView();showTab('trade');renderList();
+  toast('فروش‌های احتساب‌نشدهٔ '+sym+' — انتخاب کن و «احتساب سیو» بزن','info');
+};
+
+/* ---------- calc ---------- */
+function runCalc(){
+  var c=cfg(),q=rN('calcQty')||0,sp=rN('calcSellPrice')||0,bp=rN('calcBuyPrice')||0,tq=rN('calcTargetQty')||0;
+  var q2=rN('calcQty2')||0,sp2=rN('calcSellPrice2')||0,bp2=rN('calcBuyPrice2')||0;
+  var two=q2>0&&sp2>0,n1=q*sp*(1-c.comm),n2=two?q2*sp2*(1-c.comm):0,nt=n1+n2,qt=q+(two?q2:0);
+  document.getElementById('calcBuyPrice').disabled=two;document.getElementById('calcBuyPrice2').disabled=!two;
+  var b7=0,b8=0,b11=0,b12=0,add=0;
+  if(q>0&&sp>0){b7=Math.floor(nt/((qt+1)*(1+c.comm)));b8=Math.floor(nt/((qt+2)*(1+c.comm)));if(tq>0)b11=Math.floor(nt/((qt+tq)*(1+c.comm)));
+    if(!two){if(bp>0){b12=Math.floor(n1/(bp*(1+c.comm)));add=b12-q;}}else if(bp2>0){b12=Math.floor(nt/(bp2*(1+c.comm)));add=b12-qt;}}
+  document.getElementById('resB7').textContent=fI(b7);document.getElementById('resB8').textContent=fI(b8);
+  document.getElementById('resB11').textContent=fI(b11);document.getElementById('resB12').textContent=fI(b12);
+  document.getElementById('resAdd').textContent=fI(add);
+  var b=document.getElementById('calcBadge');
+  if(two){b.textContent='پله‌ای (۲ مرحله)';b.className='mode-badge m-two';document.getElementById('calcMode').textContent='حالت پله‌ای: B7/B8/B11 از مجموع خالص هر دو فروش · قیمت خرید فقط B\'6';}
+  else{b.textContent='تک‌مرحله‌ای';b.className='mode-badge m-single';document.getElementById('calcMode').textContent='حالت تک‌مرحله‌ای — روال پایه (قیمت خرید در B6)';}
+}
+each(['calcQty','calcSellPrice','calcBuyPrice','calcTargetQty','calcQty2','calcSellPrice2','calcBuyPrice2'],function(i){var e=document.getElementById(i);if(e)e.addEventListener('input',runCalc);});
+
+/* ---------- transactions ---------- */
+window.saveTransaction=function(){
+  var date=nd(document.getElementById('txDate').value),type=document.getElementById('txType').value,sym=document.getElementById('txSymbol').value.trim(),
+      qty=Math.round(rN('txQty')),price=rN('txPrice'),st=document.getElementById('txStatus').value,tpm=rN('txTP'),slm=rN('txSL');
+  if(!date||!sym||isNaN(qty)||isNaN(price)||qty<=0||price<=0){toast('تاریخ، نماد، تعداد و قیمتِ معتبر وارد کن','err');return;}
+  if(type==='فروش'&&qty>qtyOf(sym)){toast('فروش '+fI(qty)+' بیش از موجودی '+fI(qtyOf(sym))+' است','err');return;}
+  var snap=clone(data),tx=mkTx(date,type,sym,qty,price,st,tpm,slm);
+  data.transactions.push(tx);lastCreatedId=tx.id;sortTx();
+  if(data.hiddenSymbols[sym]&&qtyOf(sym)>0)delete data.hiddenSymbols[sym];
+  sync();save();renderAll();
+  if(type==='خرید'){var rem=tx.quantity-(tx.soldQty||0);toast(rem===tx.quantity?('خرید ثبت شد ✅ لات دست‌نخورده — مانده '+fI(rem)):('خرید ثبت شد ✅ مانده '+fI(rem)),'ok');}
+  else toast('فروش ثبت شد ✅ اگر سیو سود بود، با 🎯 همان ردیف احتسابش کن','ok');
+  tick(type==='خرید'?720:520,.09);offerUndo('ثبت معامله',snap);
+  each(['txDate','txSymbol','txQty','txPrice','txTP','txSL'],function(i){document.getElementById(i).value='';});
+  document.getElementById('txType').value='خرید';document.getElementById('txStatus').value='فعال';
+};
+window.filterTx=function(f){currentFilter=f;saveView();renderList();};
+window.toggleAll=function(on){selection={};if(on)visibleTx().forEach(function(t){selection[t.id]=1;});renderList();};
+window.toggleSel=function(id,on){if(on)selection[id]=1;else delete selection[id];renderList();};
+window.clearSel=function(){selection={};renderList();};
+window.selectUntagged=function(){
+  selection={};visibleTx().forEach(function(t){if(t.type==='فروش'&&!t.saveTag)selection[t.id]=1;});
+  if(!Object.keys(selection).length){currentFilter='untagged';saveView();visibleTx().forEach(function(t){selection[t.id]=1;});}
+  renderList();
+  toast(fI(Object.keys(selection).length)+' فروش احتساب‌نشده انتخاب شد — حالا «احتساب سیو» را بزن','info');
+};
+window.bulkDelete=function(){
+  var ids=Object.keys(selection);if(!ids.length)return;if(!confirm('حذف '+fI(ids.length)+' معامله؟'))return;
+  stashRecovery('حذف گروهی');var snap=clone(data),cashIds=[];
+  data.transactions.forEach(function(t){if(selection[t.id]&&t.cashId)cashIds.push(t.cashId);});
+  data.transactions=data.transactions.filter(function(t){return !selection[t.id];});
+  if(cashIds.length)data.deposits=data.deposits.filter(function(d){return cashIds.indexOf(d.id)<0;});
+  selection={};sync();save();renderAll();toast(fI(ids.length)+' معامله حذف شد','warn');tick(300,.12);offerUndo('حذف گروهی',snap);
+};
+window.bulkTagSave=function(on){
+  var ids=Object.keys(selection);if(!ids.length)return;
+  var snap=clone(data),n=0;
+  data.transactions.forEach(function(t){if(selection[t.id]&&t.type==='فروش'){t.saveTag=!!on;n++;}});
+  if(!n){toast('در انتخاب‌ها فروشی نیست','warn');return;}
+  save();renderAll();
+  toast(on?(fI(n)+' فروش در هدف سیو احتساب شد 🎯 درصد برداشت اصلاح شد'):(fI(n)+' فروش از احتساب خارج شد'),on?'ok':'warn');
+  tick(on?840:420,.1);offerUndo(on?'احتساب گروهی سیو':'لغو احتساب گروهی',snap);
+};
+window.quickTag=function(id){
+  var t=null;data.transactions.forEach(function(x){if(x.id===id)t=x;});
+  if(!t||t.type!=='فروش')return;
+  var snap=clone(data);t.saveTag=!t.saveTag;
+  save();renderAll();if(drawerId===id)openDrawer(id);
+  toast(t.saveTag?('🎯 '+t.symbol+' احتساب شد — درصد برداشت بالا رفت'):('احتساب '+t.symbol+' برداشته شد'),t.saveTag?'ok':'warn');
+  tick(t.saveTag?860:400,.08);offerUndo('تغییر برچسب سیو',snap);
+};
+function visibleTx(){
+  var txs=data.transactions.slice();
+  if(currentFilter==='خرید'||currentFilter==='فروش')txs=txs.filter(function(t){return t.type===currentFilter;});
+  else if(currentFilter==='untagged')txs=txs.filter(function(t){return t.type==='فروش'&&!t.saveTag;});
+  else if(currentFilter==='tagged')txs=txs.filter(function(t){return t.type==='فروش'&&t.saveTag;});
+  var sf=document.getElementById('symbolFilter').value;if(sf&&sf!=='all')txs=txs.filter(function(t){return t.symbol===sf;});
+  var q=toEn(document.getElementById('searchBox').value.trim()).toLowerCase();
+  if(q)txs=txs.filter(function(t){return (t.symbol+' '+t.date+' '+t.price+' '+t.quantity).toLowerCase().indexOf(q)>=0||toEn(t.symbol+' '+t.date+' '+t.price).indexOf(q)>=0;});
+  var m=document.getElementById('sortMode').value;
+  var ch=txs.slice().sort(function(a,b){var ka=dk(a.date),kb=dk(b.date);if(ka!==kb)return ka-kb;return(a.createdAt||0)-(b.createdAt||0);});
+  if(m==='date_desc')return ch.reverse();if(m==='date_asc')return ch;
+  var cp=ch.slice();
+  if(m==='price_desc')cp.sort(function(a,b){return b.price-a.price;});
+  if(m==='price_asc')cp.sort(function(a,b){return a.price-b.price;});
+  if(m==='qty_desc')cp.sort(function(a,b){return b.quantity-a.quantity;});
+  if(m==='rem_desc')cp.sort(function(a,b){return (b.type==='خرید'?b.quantity-(b.soldQty||0):-1)-(a.type==='خرید'?a.quantity-(a.soldQty||0):-1);});
+  return cp;
+}
+function renderList(){
+  var w=document.getElementById('lotWarn');
+  if(lotWarning){w.textContent=lotWarning;w.style.display='block';}else w.style.display='none';
+  var un=allUntagged(),ub=document.getElementById('untaggedBar'),rc=document.getElementById('railUntagged');
+  if(un.length){
+    var sum=0;un.forEach(function(t){sum+=(t.tradeValue||0);});
+    document.getElementById('untaggedTxt').innerHTML='<b>'+fI(un.length)+'</b> فروشِ احتساب‌نشده به مبلغ نقدِ <b>'+fI(sum)+'</b> ریال داری. اگر سیو سود بوده‌اند، احتسابشان کن تا درصد برداشت درست شود.';
+    ub.classList.add('on');rc.style.display='inline-block';rc.textContent=fI(un.length);
+  }else{ub.classList.remove('on');rc.style.display='none';}
+  var ch=data.transactions.slice().sort(function(a,b){var ka=dk(a.date),kb=dk(b.date);if(ka!==kb)return ka-kb;return(a.createdAt||0)-(b.createdAt||0);});
+  var bal={},at={},no={};ch.forEach(function(t,i){bal[t.symbol]=(bal[t.symbol]||0)+(t.type==='خرید'?t.quantity:-t.quantity);at[t.id]=bal[t.symbol];no[t.id]=i+1;});
+  var hi=hiBuy(),rows=visibleTx(),h='';
+  rows.forEach(function(t){
+    var isB=t.type==='خرید',rem=isB?t.quantity-(t.soldQty||0):null;
+    var bd=isB?'<span class="badge bg-buy">خرید</span>':'<span class="badge bg-sell">فروش</span>';
+    var sb=isB?(rem>0?'<span class="badge bg-on">فعال</span>':'<span class="badge bg-off">غیرفعال</span>'):(t.saveTag?'<span class="badge bg-save">سیو</span>':'<span class="badge bg-flat">عادی</span>');
+    var isH=isB&&rem>0&&t.price===hi[t.symbol];
+    var rc2=!isB?'<span class="neu">—</span>':(rem===t.quantity?'<span class="rem-full">'+fI(rem)+'</span>':(rem>0?'<span class="rem-part">'+fI(rem)+'</span>':'<span class="rem-zero">۰</span>'));
+    var s=!isB?null:(t.stopLossManual!=null?t.stopLossManual:(t.stopLoss!=null?t.stopLoss:sl(t.price,cfg().sl)));
+    var cls=(t.id===lastCreatedId?'fresh ':'')+(selection[t.id]?'sel ':'')+(!isB&&!t.saveTag?'untagged ':'')+'clickable';
+    var tagBtn=!isB?'<button class="btn b-xs '+(t.saveTag?'b-ghost':'b-violet')+'" title="'+(t.saveTag?'لغو احتساب سیو':'احتساب به‌عنوان سیو سود')+'" onclick="quickTag(\''+t.id+'\')">🎯</button> ':'';
+    h+='<tr class="'+cls+'" onclick="openDrawer(\''+t.id+'\')">'+
+      '<td onclick="event.stopPropagation()"><input type="checkbox" style="width:15px" '+(selection[t.id]?'checked':'')+' onchange="toggleSel(\''+t.id+'\',this.checked)"></td>'+
+      '<td>'+fI(no[t.id])+'</td><td>'+t.date+'</td><td>'+bd+'</td><td>'+esc(t.symbol)+(t.id===lastCreatedId?' <span class="badge bg-new">جدید</span>':'')+'</td>'+
+      '<td>'+fI(t.quantity)+'</td><td>'+rc2+'</td><td class="'+(isH?'risk':'')+'">'+fP(t.price)+'</td><td><b>'+fI(at[t.id])+'</b></td>'+
+      '<td class="'+(isH?'risk':'')+'">'+fP(s)+'</td><td>'+sb+'</td>'+
+      '<td onclick="event.stopPropagation()">'+tagBtn+'<button class="btn b-xs b-amber" onclick="openEdit(\''+t.id+'\')">✏️</button> <button class="btn b-xs b-red" onclick="deleteTx(\''+t.id+'\')">🗑️</button></td></tr>';
+  });
+  document.getElementById('txBody').innerHTML=h||'<tr><td colspan="12" class="neu" style="padding:22px">موردی نیست</td></tr>';
+  var qm=allQty(),p=[];for(var s in qm)p.push(s+': '+fI(qm[s]));
+  document.getElementById('currentQty').textContent=p.join(' | ')||'—';
+  var n=Object.keys(selection).length;document.getElementById('selCount').textContent=fI(n);
+  document.getElementById('selBar').classList.toggle('on',n>0);
+  document.getElementById('selAll').checked=n>0&&n===rows.length;
+}
+window.deleteTx=function(id){
+  if(!confirm('حذف این معامله؟'))return;
+  var snap=clone(data),tx=null;data.transactions.forEach(function(t){if(t.id===id)tx=t;});
+  data.transactions=data.transactions.filter(function(t){return t.id!==id;});
+  if(tx&&tx.cashId)data.deposits=data.deposits.filter(function(d){return d.id!==tx.cashId;});
+  if(lastCreatedId===id)lastCreatedId=null;delete selection[id];
+  sync();save();renderAll();if(drawerId===id)closeDrawer();
+  toast('حذف شد — هدف سیو خودکار اصلاح شد','warn');tick(300,.11);offerUndo('حذف معامله',snap);
+};
+
+/* ---------- edit modal + save option ---------- */
+function setSw(id,on){var b=document.getElementById(id);b.classList.toggle('on',!!on);b.setAttribute('aria-checked',on?'true':'false');}
+function getSw(id){return document.getElementById(id).classList.contains('on');}
+window.toggleEditSave=function(){setSw('editIsSave',!getSw('editIsSave'));editSavePreview();};
+window.toggleEditCash=function(){setSw('editMakeCash',!getSw('editMakeCash'));editSavePreview();};
+window.editTypeChanged=function(){
+  var isSell=document.getElementById('editType').value==='فروش';
+  document.getElementById('editSavePanel').style.display=isSell?'block':'none';
+  if(!isSell){setSw('editIsSave',false);setSw('editMakeCash',false);}
+  editSavePreview();
+};
+window.editSavePreview=function(){
+  if(document.getElementById('editType').value!=='فروش')return;
+  var sym=document.getElementById('editSymbol').value.trim();
+  var n=Math.round(rN('editQty')),pr=rN('editPrice'),c=cfg();
+  var on=getSw('editIsSave');
+  var cash=(!isNaN(n)&&!isNaN(pr)&&n>0&&pr>0)?Math.round((n*pr-Math.round(n*pr*c.comm*100)/100)*100)/100:0;
+  document.getElementById('esCash').textContent=fI(on?cash:0);
+  document.getElementById('editCashRow').style.opacity=on?'1':'.4';
+  var q=qtyOf(sym),dp=Number(data.dayPrices[sym]||0),be=beOf(sym,q);
+  var tx=null;data.transactions.forEach(function(x){if(x.id===editingId)tx=x;});
+  if(!sym||!(dp>0)||q<=0){
+    document.getElementById('esTaken').textContent=fI(takenOf(sym));
+    document.getElementById('esRemain').textContent='—';
+    document.getElementById('esNote').innerHTML='برای این نماد قیمت روز ثبت نشده؛ احتساب انجام می‌شود ولی درصد در صفحهٔ قیمت روز بعد از ورود قیمت دیده می‌شود.';
+    return;
+  }
+  var info=planOf(sym,q,dp,be);
+  var oldCash=(tx&&tx.saveTag)?(tx.tradeValue||0):0;
+  var newTaken=Math.max(0,info.taken-oldCash+(on?cash:0));
+  var remainAfter=Math.max(0,info.target-newTaken);
+  var pct=info.target>0?Math.min(100,newTaken/info.target*100):0;
+  document.getElementById('esTaken').textContent=fI(newTaken);
+  document.getElementById('esRemain').textContent=fI(remainAfter);
+  document.getElementById('esNote').innerHTML='هدف قفل‌شده: <b>'+fI(info.target)+'</b> · برداشته فعلی: <b>'+fI(info.taken)+'</b> → پس از ذخیره <b>'+fI(Math.round(pct))+'٪</b> برداشت و <b>'+fI(remainAfter)+'</b> باقی می‌ماند.'+(on&&getSw('editMakeCash')?' رکورد نقدی هم ثبت/به‌روزرسانی می‌شود.':'');
+};
+window.openEdit=function(id){
+  var t=null;data.transactions.forEach(function(x){if(x.id===id)t=x;});if(!t)return;editingId=id;
+  document.getElementById('editDate').value=t.date;document.getElementById('editType').value=t.type;
+  document.getElementById('editSymbol').value=t.symbol;document.getElementById('editQty').value=fE(t.quantity);
+  document.getElementById('editPrice').value=fEP(t.price);document.getElementById('editStatus').value=t.status||'فعال';
+  document.getElementById('editTP').value=t.takeProfitManual?fEP(t.takeProfitManual):'';
+  document.getElementById('editSL').value=t.stopLossManual?fEP(t.stopLossManual):'';
+  document.getElementById('editSavePanel').style.display=t.type==='فروش'?'block':'none';
+  setSw('editIsSave',!!t.saveTag);
+  setSw('editMakeCash',!!t.cashId);
+  editSavePreview();
+  document.getElementById('editModal').classList.add('on');document.getElementById('scrim').classList.add('on');
+};
+window.closeEditModal=function(){document.getElementById('editModal').classList.remove('on');document.getElementById('scrim').classList.remove('on');editingId=null;};
+window.saveEdit=function(){
+  var t=null;data.transactions.forEach(function(x){if(x.id===editingId)t=x;});if(!t)return;
+  var c=cfg(),qty=Math.round(rN('editQty')),price=rN('editPrice'),date=nd(document.getElementById('editDate').value);
+  if(!date||isNaN(qty)||isNaN(price)||qty<=0||price<=0){toast('تاریخ، تعداد و قیمتِ معتبر وارد کن','err');return;}
+  var snap=clone(data);
+  var sym=document.getElementById('editSymbol').value.trim();
+  t.date=date;t.type=document.getElementById('editType').value;t.symbol=sym;t.quantity=qty;t.price=t2(price);
+  var a=rN('editTP'),b=rN('editSL');
+  var wantSave=t.type==='فروش'&&getSw('editIsSave');
+  var wantCash=wantSave&&getSw('editMakeCash');
+  if(t.type==='فروش'){t.status='';t.soldQty=0;t.takeProfit=null;t.takeProfitManual=null;t.stopLoss=null;t.stopLossManual=null;}
+  else{t.takeProfitManual=isNaN(a)?null:t2(a);t.stopLossManual=isNaN(b)?null:t2(b);t.takeProfit=tp(t.price,c.tp);t.stopLoss=sl(t.price,c.sl);}
+  var base=t.price*t.quantity;t.commission=Math.round(base*c.comm*100)/100;
+  t.tradeValue=t.type==='خرید'?-(base+t.commission):(base-t.commission);
+  t.saveTag=wantSave;
+  if(wantCash){
+    var amt=Math.abs(t.tradeValue);
+    if(t.cashId){
+      var found=false;
+      data.deposits.forEach(function(d){if(d.id===t.cashId){found=true;d.amount=-amt;d.rawAmount=amt;d.date=t.date;d.type='سیو سود';d.auto=true;d.desc='سیو سود '+t.symbol+' · '+fI(t.quantity)+' سهم @ '+fP(t.price);}});
+      if(!found)t.cashId=null;
+    }
+    if(!t.cashId){
+      var rec={id:uid(),createdAt:Date.now(),date:t.date,type:'سیو سود',amount:-amt,rawAmount:amt,auto:true,desc:'سیو سود '+t.symbol+' · '+fI(t.quantity)+' سهم @ '+fP(t.price)};
+      data.deposits.push(rec);t.cashId=rec.id;
+    }
+  }else if(t.cashId){
+    var rid=t.cashId,wasAuto=false;
+    data.deposits.forEach(function(d){if(d.id===rid)wasAuto=!!d.auto;});
+    if(wasAuto)data.deposits=data.deposits.filter(function(d){return d.id!==rid;});
+    t.cashId=null;
+  }
+  sortTx();sync();save();renderAll();closeEditModal();
+  toast(wantSave?'ذخیره شد ✅ این فروش در سیو سود احتساب شد':'ذخیره شد ✅','ok');tick(760,.08);offerUndo('ویرایش معامله',snap);
+};
+window.openDrawer=function(id){
+  var t=null;data.transactions.forEach(function(x){if(x.id===id)t=x;});if(!t)return;drawerId=id;
+  var isB=t.type==='خرید',rem=isB?t.quantity-(t.soldQty||0):0;
+  var h='<dl class="kv"><dt>نماد</dt><dd>'+esc(t.symbol)+'</dd><dt>تاریخ</dt><dd>'+t.date+'</dd><dt>نوع</dt><dd>'+(isB?'خرید':'فروش')+'</dd><dt>تعداد</dt><dd>'+fI(t.quantity)+'</dd><dt>قیمت</dt><dd>'+fP(t.price)+'</dd><dt>کارمزد</dt><dd>'+fI(t.commission)+'</dd><dt>'+(isB?'پرداختی':'دریافتی')+'</dt><dd>'+fI(Math.abs(t.tradeValue))+'</dd>'+(isB?'<dt>مانده</dt><dd class="'+(rem>0?'pos':'neu')+'">'+fI(rem)+'</dd><dt>وضعیت</dt><dd>'+(rem>0?'فعال':'غیرفعال')+'</dd>':'<dt>احتساب سیو</dt><dd>'+(t.saveTag?'<span class="badge bg-save">احتساب‌شده</span>':'<span class="badge bg-flat">احتساب‌نشده</span>')+'</dd>')+'</dl>';
+  if(!isB){
+    h+='<button class="btn '+(t.saveTag?'b-ghost':'b-violet')+'" style="width:100%;justify-content:center;margin-bottom:10px" onclick="quickTag(\''+t.id+'\')">'+(t.saveTag?'↩️ لغو احتساب سیو':'🎯 احتساب به‌عنوان سیو سود')+'</button>';
+    h+='<button class="btn b-amber" style="width:100%;justify-content:center;margin-bottom:14px" onclick="closeDrawer();openEdit(\''+t.id+'\')">✏️ ویرایش کامل + گزینهٔ سیو و رکورد نقدی</button>';
+    h+='<div class="note n-violet" style="margin-bottom:12px">با احتساب، فقط <b>نقدِ همین فروش</b> از هدف کم می‌شود و درصد برداشت بالا می‌رود؛ هدف از نو ساخته نمی‌شود.</div>';
+  }
+  if(lastAlloc){
+    if(isB){var cs=lastAlloc.consumers[t.id]||[];
+      h+='<div class="note n-cyan" style="margin-bottom:9px">این لات توسط کدام فروش‌ها مصرف شده؟</div>';
+      if(cs.length){h+='<div class="tbl-wrap"><table class="trace-tbl"><thead><tr><th>تاریخ فروش</th><th>قیمت فروش</th><th>برداشته</th></tr></thead><tbody>';
+        cs.forEach(function(c){h+='<tr><td>'+c.date+'</td><td>'+fP(c.price)+'</td><td class="neg">'+fI(c.qty)+'</td></tr>';});h+='</tbody></table></div>';}
+      else h+='<div class="note n-green">هیچ فروشی از این لات برنداشته ✅</div>';
+    }else{var sc=lastAlloc.sources[t.id]||[];
+      h+='<div class="note n-amber" style="margin-bottom:9px">این فروش از کدام لات‌ها برداشته؟</div>';
+      if(sc.length){h+='<div class="tbl-wrap"><table class="trace-tbl"><thead><tr><th>تاریخ خرید</th><th>بهای لات</th><th>تعداد</th></tr></thead><tbody>';
+        sc.forEach(function(c){h+='<tr><td>'+c.date+'</td><td>'+fP(c.price)+'</td><td class="pos">'+fI(c.qty)+'</td></tr>';});h+='</tbody></table></div>';}
+      var fr=null;lastAlloc.frames.forEach(function(f){if(f.event.id===t.id)fr=f;});
+      if(fr&&fr.short>0)h+='<div class="note n-amber" style="margin-top:9px">⚠️ '+fI(fr.short)+' سهم بدون خریدِ متناظر</div>';}
+  }
+  document.getElementById('drawerTitle').textContent=(isB?'لات خرید · ':'فروش · ')+t.symbol;
+  document.getElementById('drawerBody').innerHTML=h;
+  document.getElementById('drawer').classList.add('on');document.getElementById('scrim').classList.add('on');
+};
+window.closeDrawer=function(){document.getElementById('drawer').classList.remove('on');document.getElementById('scrim').classList.remove('on');drawerId=null;};
+window.closeAll=function(){closeDrawer();closeEditModal();closeCashEdit();closeSaveModal();};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll();});
+
+/* ---------- cash ---------- */
+window.saveCash=function(){
+  var date=nd(document.getElementById('cashDate').value),type=document.getElementById('cashType').value,a=rN('cashAmount'),d=document.getElementById('cashDesc').value.trim();
+  if(!date||isNaN(a)||a<=0){toast('تاریخ و مبلغ معتبر وارد کن','err');return;}
+  var snap=clone(data);
+  data.deposits.push({id:uid(),createdAt:Date.now(),date:date,type:type,amount:(type==='برداشت'||type==='سیو سود')?-Math.abs(a):Math.abs(a),desc:d,rawAmount:Math.abs(a)});
+  save();renderCash();renderPnl();toast('ذخیره شد ✅','ok');tick(700,.08);offerUndo('ثبت رکورد نقدی',snap);
+  document.getElementById('cashDate').value='';document.getElementById('cashAmount').value='';document.getElementById('cashDesc').value='';
+};
+window.deleteCash=function(id){if(!confirm('حذف این رکورد؟'))return;var snap=clone(data);data.deposits=data.deposits.filter(function(d){return d.id!==id;});data.transactions.forEach(function(t){if(t.cashId===id)t.cashId=null;});save();renderCash();renderPnl();toast('حذف شد','warn');offerUndo('حذف رکورد نقدی',snap);};
+window.openCashEdit=function(id){
+  var d=null;data.deposits.forEach(function(x){if(x.id===id)d=x;});if(!d)return;cashEditingId=id;
+  document.getElementById('ceDate').value=d.date;document.getElementById('ceType').value=d.type||'واریز';
+  document.getElementById('ceAmount').value=fE(Math.abs(d.amount||0));document.getElementById('ceDesc').value=d.desc||'';
+  document.getElementById('cashEditModal').classList.add('on');document.getElementById('scrim').classList.add('on');
+};
+window.closeCashEdit=function(){document.getElementById('cashEditModal').classList.remove('on');document.getElementById('scrim').classList.remove('on');cashEditingId=null;};
+window.saveCashEdit=function(){
+  var d=null;data.deposits.forEach(function(x){if(x.id===cashEditingId)d=x;});if(!d)return;
+  var date=nd(document.getElementById('ceDate').value),type=document.getElementById('ceType').value,a=rN('ceAmount');
+  if(!date||isNaN(a)||a<=0){toast('تاریخ و مبلغ معتبر وارد کن','err');return;}
+  var snap=clone(data);d.date=date;d.type=type;d.rawAmount=Math.abs(a);d.amount=(type==='برداشت'||type==='سیو سود')?-Math.abs(a):Math.abs(a);d.desc=document.getElementById('ceDesc').value.trim();
+  save();renderCash();renderPnl();closeCashEdit();toast('ذخیره شد ✅','ok');offerUndo('ویرایش رکورد نقدی',snap);
+};
+function renderCash(){
+  var ds=data.deposits.slice().sort(function(a,b){var ka=dk(a.date),kb=dk(b.date);if(ka!==kb)return ka-kb;return(a.createdAt||0)-(b.createdAt||0);});
+  var ti=0,to=0;ds.forEach(function(d){if(d.amount>0)ti+=d.amount;else to+=Math.abs(d.amount);});
+  var dp=ds.slice().reverse(),h='';
+  dp.forEach(function(d,i){h+='<tr><td>'+fI(dp.length-i)+'</td><td>'+d.date+'</td><td>'+d.type+(d.auto?' <span class="badge bg-save">خودکار</span>':'')+'</td><td class="'+(d.amount>0?'pos':'neg')+'">'+fI(Math.abs(d.amount))+'</td><td>'+esc(d.desc||'—')+'</td><td><button class="btn b-xs b-amber" onclick="openCashEdit(\''+d.id+'\')">✏️</button> <button class="btn b-xs b-red" onclick="deleteCash(\''+d.id+'\')">🗑️</button></td></tr>';});
+  document.getElementById('cashBody').innerHTML=h||'<tr><td colspan="6" class="neu" style="padding:20px">رکوردی نیست</td></tr>';
+  document.getElementById('cashIn').textContent=fI(ti);document.getElementById('cashOut').textContent=fI(to);document.getElementById('cashTotal').textContent=fI(ti-to);
+}
+
+/* ---------- day price ---------- */
+window.addDayPrice=function(){var s=document.getElementById('newSymbolInput').value.trim();if(!s)return;
+  if(!(s in data.dayPrices))data.dayPrices[s]=0;if(!(s in data.breakEvens))data.breakEvens[s]=0;delete data.hiddenSymbols[s];
+  save();renderPnl();document.getElementById('newSymbolInput').value='';toast('«'+s+'» اضافه شد','ok');};
+window.updateDayPrice=function(s,v){data.dayPrices[s]=toNum(v)||0;save();renderPnl();};
+window.updateBreakEven=function(s,v){var n=toNum(v);data.breakEvens[s]=(isNaN(n)||n<=0)?0:n;save();renderPnl();};
+window.removeZeroSymbol=function(s){
+  if(qtyOf(s)>0){toast('این نماد هنوز موجودی دارد','err');return;}
+  if(!confirm('«'+s+'» از صفحهٔ قیمت روز حذف شود؟\nمعاملات دست‌نخورده می‌مانند.'))return;
+  var snap=clone(data);delete data.dayPrices[s];delete data.breakEvens[s];delete data.savePlan[s];data.hiddenSymbols[s]=1;
+  save();renderPnl();toast('«'+s+'» حذف شد','warn');offerUndo('حذف نماد',snap);
+};
+window.resetSave=function(s){
+  if(!confirm('هدف سیو '+s+' از نو محاسبه شود؟\nبرچسب پله‌های قبلی برداشته می‌شود (معاملات پاک نمی‌شوند).'))return;
+  var snap=clone(data);
+  data.transactions.forEach(function(t){if(t.symbol===s&&t.type==='فروش')t.saveTag=false;});
+  data.saveAdjust[s]=0;delete data.savePlan[s];
+  save();renderAll();toast('هدف '+s+' از نو ساخته شد','warn');offerUndo('بازنشانی هدف',snap);
+};
+window.resetAllSaves=function(){
+  if(!confirm('هدف سیو همهٔ نمادها از نو محاسبه شود؟'))return;
+  var snap=clone(data);data.transactions.forEach(function(t){if(t.type==='فروش')t.saveTag=false;});
+  data.saveAdjust={};data.savePlan={};save();renderAll();toast('همهٔ هدف‌ها از نو ساخته شد','warn');offerUndo('بازنشانی هدف‌ها',snap);
+};
+window.openSave=function(s){
+  var q=qtyOf(s),dp=data.dayPrices[s]||0,be=beOf(s,q);
+  if(q<=0){toast('موجودی صفر است','err');return;}
+  if(dp<=0){toast('اول قیمت روز را وارد کن','err');return;}
+  var sug=suggestOf(s,q,dp,be);
+  if(sug<=0){toast('هدف سیو کامل شده — در این قیمت پیشنهادی نیست','info');return;}
+  saveSym=s;svSug=sug;
+  document.getElementById('svSym').textContent=s;
+  document.getElementById('svDate').value=today();
+  document.getElementById('svPrice').value=fEP(dp);
+  document.getElementById('svQty').value=fE(sug);
+  var rg=document.getElementById('svRange');rg.max=String(q);rg.value=String(sug);
+  document.getElementById('svInfo').innerHTML='موجودی <b>'+fI(q)+'</b> · قیمت روز <b>'+fP(dp)+'</b> · سر‌به‌سر <b>'+fP(be)+'</b> · سود باز <b>'+fI(openPnl(s,q,dp,be))+'</b>';
+  svPreview();
+  document.getElementById('saveModal').classList.add('on');document.getElementById('scrim').classList.add('on');
+};
+window.closeSaveModal=function(){document.getElementById('saveModal').classList.remove('on');document.getElementById('scrim').classList.remove('on');saveSym=null;};
+window.svStep=function(d){
+  if(!saveSym)return;var q=qtyOf(saveSym),n=Math.round(rN('svQty'));if(isNaN(n))n=0;
+  n=Math.max(0,Math.min(q,n+d));document.getElementById('svQty').value=n?fE(n):'';
+  document.getElementById('svRange').value=String(n);svPreview();
+};
+window.svPct=function(p){
+  if(!saveSym)return;var q=qtyOf(saveSym),n=Math.max(1,Math.min(q,Math.floor(svSug*p/100)));
+  document.getElementById('svQty').value=fE(n);document.getElementById('svRange').value=String(n);svPreview();
+};
+window.svAll=function(){if(!saveSym)return;var q=qtyOf(saveSym);document.getElementById('svQty').value=fE(q);document.getElementById('svRange').value=String(q);svPreview();};
+window.svFromRange=function(){var n=parseInt(document.getElementById('svRange').value,10)||0;document.getElementById('svQty').value=n?fE(n):'';svPreview();};
+window.svPreview=function(){
+  if(!saveSym)return;
+  var s=saveSym,c=cfg(),q=qtyOf(s),dp=data.dayPrices[s]||0,be=beOf(s,q);
+  var info=planOf(s,q,dp,be),p=info.plan;
+  var n=Math.round(rN('svQty')),pr=rN('svPrice'),btn=document.getElementById('svConfirm');
+  document.getElementById('svPlanBar').style.width=(info.target>0?Math.min(100,info.taken/info.target*100):0)+'%';
+  document.getElementById('svPlanTxt').innerHTML='هدف قفل‌شده در قیمت <b>'+fP(p.price)+'</b>: <b>'+fI(info.target)+'</b> · برداشته‌شده: <b>'+fI(info.taken)+'</b> · باقی‌مانده: <b>'+fI(info.remain)+'</b> · پیشنهاد کل: <b>'+fI(svSug)+'</b> سهم';
+  if(isNaN(n)||n<0)n=0;
+  if(isNaN(pr)||pr<=0){document.getElementById('svFeeView').textContent='۰';document.getElementById('svCash').textContent='۰';document.getElementById('svRemain').textContent=fI(info.remain);document.getElementById('svAfter').textContent='—';btn.disabled=true;document.getElementById('svNote').innerHTML='قیمت فروش را وارد کن.';return;}
+  var fee=Math.round(n*pr*c.comm*100)/100,cash=n*pr-fee;
+  var newTaken=info.taken+cash,newQty=q-n;
+  var newTarget=p.price>0?Math.max(0,p.amount+newQty*(dp-p.price)):0;
+  var remainAfter=newQty>0?Math.max(0,newTarget-newTaken):0;
+  var afterSug=(remainAfter>0&&dp>0&&newQty>0)?Math.min(newQty,Math.floor(remainAfter/(dp*(1-c.comm)))):0;
+  document.getElementById('svFeeView').textContent=fI(fee);
+  document.getElementById('svCash').textContent=fI(cash);
+  document.getElementById('svRemain').textContent=fI(remainAfter);
+  var ae=document.getElementById('svAfter');ae.textContent=newQty<=0?'۰ (تسویه)':fI(afterSug);ae.className='val '+(afterSug>0?'':'pos');
+  btn.disabled=(n<=0||n>q);
+  var pct=info.target>0?Math.min(100,newTaken/info.target*100):0;
+  document.getElementById('svNote').innerHTML=n>q?'<span style="color:var(--red)">⚠️ تعداد از موجودی ('+fI(q)+') بیشتر است.</span>':(n<=0?'یک تعداد بزرگ‌تر از صفر انتخاب کن.':'این پله <b>'+fI(n)+'</b> سهم است. پس از ثبت، هدف تا <b>'+fI(Math.round(pct))+'٪</b> پر می‌شود و <b>'+fI(remainAfter)+'</b> ریال باقی می‌ماند'+(afterSug>0?' → پیشنهاد بعدی <b>'+fI(afterSug)+'</b> سهم.':' → در این قیمت دیگر پیشنهادی نمی‌گیری ✅'));
+};
+window.confirmSave=function(){
+  if(!saveSym)return;
+  var s=saveSym,c=cfg(),q=qtyOf(s),n=Math.round(rN('svQty')),pr=rN('svPrice'),date=nd(document.getElementById('svDate').value);
+  if(!date||isNaN(n)||isNaN(pr)||n<=0||pr<=0){toast('تاریخ، تعداد و قیمت معتبر وارد کن','err');return;}
+  if(n>q){toast('تعداد فروش بیش از موجودی است','err');return;}
+  var snap=clone(data),fee=Math.round(n*pr*c.comm*100)/100,cash=n*pr-fee;
+  var tx=mkTx(date,'فروش',s,n,pr,'',NaN,NaN);tx.saveTag=true;
+  var rec={id:uid(),createdAt:Date.now()+1,date:date,type:'سیو سود',amount:-Math.abs(cash),rawAmount:Math.abs(cash),auto:true,desc:'پلهٔ سیو '+s+' · '+fI(n)+' سهم @ '+fP(pr)};
+  tx.cashId=rec.id;
+  data.transactions.push(tx);data.deposits.push(rec);
+  lastCreatedId=tx.id;sortTx();sync();
+  var dp=data.dayPrices[s]||0,nq=qtyOf(s),be=beOf(s,nq),info=planOf(s,nq,dp,be),left=suggestOf(s,nq,dp,be);
+  save();renderAll();closeSaveModal();
+  toast(left>0?('پله ثبت شد ✅ نقد '+fI(cash)+' · باقی‌ماندهٔ هدف '+fI(info.remain)+' → پیشنهاد '+fI(left)+' سهم'):('پله ثبت شد ✅ هدف کامل شد؛ در این قیمت پیشنهادی نیست'),'ok');
+  tick(880,.12);offerUndo('ثبت پلهٔ سیو',snap);
+};
+function renderPnl(){
+  planDirty=false;
+  var qm=allQty(),hidden=data.hiddenSymbols,needSave=false,syms=[],seen={};
+  for(var k in qm)if(qm[k]>0){syms.push(k);seen[k]=1;if(hidden[k]){delete hidden[k];needSave=true;}}
+  for(var k1 in qm)if(!seen[k1]&&!hidden[k1]){syms.push(k1);seen[k1]=1;}
+  for(var k2 in data.dayPrices)if(!seen[k2]&&!hidden[k2]){syms.push(k2);seen[k2]=1;}
+  for(var k3 in data.breakEvens)if(!seen[k3]&&!hidden[k3]){syms.push(k3);seen[k3]=1;}
+  syms.sort(function(a,b){return a.localeCompare(b,'fa');});
+  var tv=0,tpn=0,h='',zero=0,viz=[],sumTarget=0,sumTaken=0;
+  syms.forEach(function(s){
+    var q=qm[s]||0,isZ=q<=0;if(isZ)zero++;
+    var dp=data.dayPrices[s]||0,val=q>0?q*dp:0,man=Number(data.breakEvens[s]||0),ni=netInv(s),auto=q>0?ni/q:0,be=beOf(s,q);
+    var pnl=openPnl(s,q,dp,be);
+    var info=planOf(s,q,dp,be),sug=isZ?0:suggestOf(s,q,dp,be);
+    if(!isZ&&dp>0){sumTarget+=info.target;sumTaken+=Math.min(info.taken,info.target);}
+    var pct=info.target>0?Math.min(100,info.taken/info.target*100):0;
+    var done=(!isZ&&dp>0&&info.target>0&&info.remain<=0);
+    var un=untaggedOf(s).length;
+    var lots=data.transactions.filter(function(t){return t.symbol===s&&t.type==='خرید'&&(t.quantity-(t.soldQty||0))>0;});
+    lots.sort(function(a,b){var ka=dk(a.date),kb=dk(b.date);if(ka!==kb)return ka-kb;return(a.createdAt||0)-(b.createdAt||0);});
+    var lh='',ls=0,lq=0;
+    lots.forEach(function(l){var r=l.quantity-(l.soldQty||0);lq+=r;var pr=r*(dp-l.price);ls+=pr;
+      lh+='<tr><td>'+l.date+'</td><td>'+fI(r)+'</td><td>'+fP(l.price)+'</td><td class="'+(pr>=0?'pos':'neg')+'">'+fI(pr)+'</td></tr>';});
+    if(!lh)lh='<tr><td colspan="4" class="neu">لاتِ بازی نیست</td></tr>';
+    var tr=tranchesOf(s),trH='';
+    if(tr.length){trH='<div class="tbl-wrap" style="margin:6px 0"><table><thead><tr><th>پله</th><th>تاریخ</th><th>تعداد</th><th>قیمت</th><th>نقد دریافتی</th></tr></thead><tbody>'+
+      tr.map(function(x,i){return '<tr><td>'+fI(i+1)+'</td><td>'+x.date+'</td><td>'+fI(x.qty)+'</td><td>'+fP(x.price)+'</td><td class="pos">'+fI(x.amount)+'</td></tr>';}).join('')+'</tbody></table></div>';}
+    var cls=pnl>0?'pos':(pnl<0?'neg':'');
+    tv+=val;tpn+=pnl;if(!isZ&&val>0)viz.push({sym:s,val:val,pnl:pnl});
+    h+='<tr class="'+(isZ?'zero':'')+'"><td><button class="btn b-xs b-violet" onclick="toggleLots(\''+s+'\')">🔍</button> '+esc(s)+
+      (isZ?' <span class="badge bg-flat">تسویه</span>':(done?' <span class="badge bg-done">هدف کامل</span>':''))+
+      (un?' <span class="badge bg-warn" onclick="gotoUntagged(\''+s+'\')" title="رفتن به فروش‌های احتساب‌نشده">'+fI(un)+' احتساب‌نشده</span>':'')+'</td>'+
+      '<td>'+fI(q)+'</td>'+
+      '<td><input class="num-fmt mini-inp" inputmode="numeric" value="'+(dp>0?fE(dp):'')+'" placeholder="قیمت روز" onchange="updateDayPrice(\''+s+'\',this.value)"></td>'+
+      '<td><input class="num-fmt mini-inp" inputmode="numeric" value="'+(man>0?fE(man):'')+'" placeholder="کارگزاری" title="'+(auto>0?'تخمین: '+fE(auto):'')+'" onchange="updateBreakEven(\''+s+'\',this.value)"></td>'+
+      '<td class="'+cls+'"><b>'+fI(pnl)+'</b></td>'+
+      '<td><b>'+fI(info.target)+'</b><br><span class="save-meter"><i style="width:'+pct+'%"></i></span></td>'+
+      '<td><span style="color:#c4b5fd">'+fI(info.taken)+'</span><br><b style="font-size:.72rem;color:'+(pct>=99?'var(--acid)':'var(--amber)')+'">'+fI(Math.round(pct))+'٪</b></td>'+
+      '<td class="'+(info.remain>0?'pos':'neu')+'"><b>'+fI(info.remain)+'</b></td>'+
+      '<td>'+(sug>0?'<b style="color:var(--cyan);font-size:.9rem">'+fI(sug)+'</b>':'<span class="neu">—</span>')+'</td>'+
+      '<td>'+(sug>0?'<button class="btn b-xs b-green" onclick="openSave(\''+s+'\')">🎯 ثبت پله</button>':'')+(info.taken>0||data.savePlan[s]?' <button class="btn b-xs b-ghost" onclick="resetSave(\''+s+'\')" title="هدف از نو">↺</button>':'')+(isZ?' <button class="btn b-xs b-red" onclick="removeZeroSymbol(\''+s+'\')">🗑️</button>':'')+'</td></tr>';
+    h+='<tr id="lots-'+s+'" style="display:none"><td colspan="10">'+
+      '<div class="note n-violet" style="margin:6px 0">هدف در قیمت <b>'+fP(info.plan.price)+'</b> قفل شده = <b>'+fI(info.target)+'</b> · برداشته <b>'+fI(info.taken)+'</b> ('+fI(Math.round(pct))+'٪) · باقی <b>'+fI(info.remain)+'</b>'+(un?' · <b style="color:var(--amber)">'+fI(un)+' فروش احتساب‌نشده</b>':'')+'</div>'+trH+
+      '<div class="note n-mute" style="margin:6px 0">سر‌به‌سر فعال: <b>'+fP(be)+'</b> ('+(man>0?'کارگزاری':'تخمین')+'), تخمین: '+fP(auto)+' · پول خالص درگیر: '+fI(ni)+' · ماندهٔ لات‌ها: '+fI(lq)+'</div>'+
+      '<div class="tbl-wrap"><table><thead><tr><th>تاریخ خرید</th><th>مانده</th><th>بهای لات</th><th>حاصل‌ضرب</th></tr></thead><tbody>'+lh+'<tr><th>جمع لات‌های باز</th><th>'+fI(lq)+'</th><th></th><th>'+fI(ls)+'</th></tr></tbody></table></div>'+
+      '<div class="legend">جمع لات‌های باز با ستون «سود/زیان باز» یکی نیست: ستون اصلی بر مبنای سر‌به‌سرِ کارگزاری است.</div></td></tr>';
+  });
+  document.getElementById('pnlBody').innerHTML=h||'<tr><td colspan="10" class="neu" style="padding:20px">نمادی نیست</td></tr>';
+  document.getElementById('zeroCountLabel').textContent=zero>0?('🧹 '+fI(zero)+' نمادِ تسویه‌شده'):'';
+  var allPct=sumTarget>0?Math.min(100,sumTaken/sumTarget*100):0;
+  document.getElementById('takenPctAll').textContent=fI(Math.round(allPct))+'٪';
+  document.getElementById('allPlanBar').style.width=allPct+'%';
+  document.getElementById('allPlanTxt').innerHTML='مجموع هدف سیو: <b>'+fI(sumTarget)+'</b> · برداشته‌شده: <b>'+fI(sumTaken)+'</b> · باقی‌مانده: <b>'+fI(Math.max(0,sumTarget-sumTaken))+'</b>';
+  document.getElementById('pulseTaken').textContent=fI(Math.round(allPct))+'٪';
+  var led=0;data.deposits.forEach(function(d){led+=d.amount;});
+  var net=0;data.transactions.forEach(function(t){net+=(t.tradeValue||0);});
+  var free=led+net,port=tv+free;
+  document.getElementById('stockValue').textContent=fI(tv);document.getElementById('portfolioValue').textContent=fI(port);
+  var u=document.getElementById('unrealizedPnl');u.textContent=fI(tpn);u.className='val '+(tpn>0?'pos':(tpn<0?'neg':''));
+  document.getElementById('freeCashLine').innerHTML='💵 نقد آزاد = تراز نقدی ('+fI(led)+') + جریان خالص معاملات ('+fI(net)+') = <b>'+fI(free)+'</b>';
+  document.getElementById('pulsePortfolio').textContent=fI(port);
+  var pp=document.getElementById('pulsePnl');pp.textContent=fI(tpn);pp.className=tpn>0?'pos':(tpn<0?'neg':'');
+  document.getElementById('pulseCash').textContent=fI(free);
+  drawViz(viz,tv);
+  if(needSave||planDirty)save();
+}
+function polar(cx,cy,r,d){var a=(d-90)*Math.PI/180;return{x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)};}
+function ann(cx,cy,r1,r2,a0,a1){var lg=(a1-a0)>180?1:0,p1=polar(cx,cy,r2,a0),p2=polar(cx,cy,r2,a1),p3=polar(cx,cy,r1,a1),p4=polar(cx,cy,r1,a0);
+  return 'M'+p1.x+' '+p1.y+'A'+r2+' '+r2+' 0 '+lg+' 1 '+p2.x+' '+p2.y+'L'+p3.x+' '+p3.y+'A'+r1+' '+r1+' 0 '+lg+' 0 '+p4.x+' '+p4.y+'Z';}
+function drawViz(items,total){
+  var svg=document.getElementById('donut'),lg=document.getElementById('donutLegend'),bars=document.getElementById('pnlBars');
+  document.getElementById('donutTotal').textContent=fI(total);
+  if(!items.length){svg.innerHTML='<circle cx="115" cy="115" r="88" fill="none" stroke="#24354f" stroke-width="26" stroke-dasharray="5 9"/>';lg.innerHTML='<div class="note n-mute" style="margin:0">قیمت روز نمادها را وارد کن.</div>';bars.innerHTML='';return;}
+  items.sort(function(a,b){return b.val-a.val;});
+  var top=items.slice(0,7),rest=items.slice(7),rv=rest.reduce(function(s,i){return s+i.val;},0);
+  if(rv>0)top.push({sym:'سایر',val:rv,pnl:rest.reduce(function(s,i){return s+i.pnl;},0)});
+  var sum=top.reduce(function(s,i){return s+i.val;},0),ang=0,paths='';
+  top.forEach(function(it,i){
+    var fr=it.val/sum,col=PAL[i%PAL.length];
+    if(top.length===1){paths+='<path class="slice" d="'+ann(115,115,62,92,0,179.9)+'" fill="'+col+'"/><path class="slice" d="'+ann(115,115,62,92,180,359.9)+'" fill="'+col+'"/>';ang=360;return;}
+    var a0=ang,a1=ang+fr*360;ang=a1;
+    paths+='<path class="slice" d="'+ann(115,115,62,92,a0,Math.min(a1,359.99))+'" fill="'+col+'" opacity=".92"><title>'+esc(it.sym)+' · '+fI(it.val)+'</title></path>';
+    if(fr>0.07){var mid=(a0+a1)/2,p=polar(115,115,77,mid);paths+='<text x="'+p.x+'" y="'+p.y+'" text-anchor="middle" dominant-baseline="middle" font-size="9.5" font-weight="700" fill="#04121c">'+Math.round(fr*100)+'٪</text>';}
+  });
+  svg.innerHTML='<circle cx="115" cy="115" r="77" fill="none" stroke="#16233c" stroke-width="30"/>'+paths;
+  lg.innerHTML=top.map(function(it,i){var pc=(it.val/sum*100).toFixed(1);
+    return '<div class="lg-item"><span class="lg-dot" style="background:'+PAL[i%PAL.length]+'"></span><span class="nm">'+esc(it.sym)+'</span><span class="pc">'+pc.replace('.','٫')+'٪</span><span class="vv">'+fI(it.val)+'</span></div>';}).join('');
+  var mx=Math.max.apply(null,items.map(function(i){return Math.abs(i.pnl);}).concat([1]));
+  bars.innerHTML='<div class="legend" style="margin:6px 0 2px"><b>سود / زیان باز هر نماد</b></div>'+items.slice(0,8).map(function(it){
+    var w=Math.max(2,Math.abs(it.pnl)/mx*100),c=it.pnl>=0?'linear-gradient(90deg,#22c55e,#4ade80)':'linear-gradient(90deg,#ff3b5c,#ff2ea6)';
+    return '<div class="bar-row"><span>'+esc(it.sym)+'</span><span class="bar-track"><span class="bar-fill" style="width:'+w+'%;background:'+c+'"></span></span><span class="'+(it.pnl>=0?'pos':'neg')+'" style="text-align:left">'+fI(it.pnl)+'</span></div>';}).join('');
+}
+
+/* ---------- fee ---------- */
+window.runCommissionTest=function(){
+  var q=Math.round(rN('testQty')),p=rN('testPrice'),t=rN('testTotal'),ty=document.getElementById('testType').value;
+  if(isNaN(q)||isNaN(p)||isNaN(t)||q<=0||p<=0||t<=0){toast('هر سه عدد را وارد کن','err');return;}
+  var base=q*p,c=ty==='خرید'?t-base:base-t,r=c/base;
+  document.getElementById('tBase').textContent=fI(base);document.getElementById('tComm').textContent=fI(c);
+  document.getElementById('tRate').textContent=r.toFixed(6);document.getElementById('tCur').textContent=cfg().comm.toFixed(6);
+  var m=document.getElementById('tMsg');
+  if(c<0){m.className='note n-amber';m.textContent='⚠️ کارمزد منفی شد — نوع معامله یا اعداد نمی‌خواند.';lastTestRate=null;}
+  else{m.className='note n-cyan';m.textContent=Math.abs(r-cfg().comm)<5e-7?'✅ ضریب واقعی با تنظیمات یکسان است.':'ضریب واقعی '+r.toFixed(6)+' با فعلی '+cfg().comm.toFixed(6)+' فرق دارد.';lastTestRate=r;}
+  tick(700,.07);
+};
+window.applyTestRate=function(){
+  if(lastTestRate===null){toast('ابتدا تست معتبر انجام بده','err');return;}
+  if(lastTestRate<0||lastTestRate>0.05){toast('ضریب نامعقول است','err');return;}
+  localStorage.setItem('commissionRate',String(lastTestRate));document.getElementById('commissionRate').value=String(lastTestRate);
+  toast('اعمال شد ✅','ok');renderAll();
+};
+
+/* ---------- import ---------- */
+function loadX(src,fb,done){var s=document.createElement('script');s.src=src;s.onload=function(){xlsxLoaded=true;done&&done();};s.onerror=function(){if(fb)loadX(fb,null,done);else toast('کتابخانه اکسل بارگذاری نشد','err');};document.head.appendChild(s);}
+function ensureX(done){if(xlsxLoaded&&typeof XLSX!=='undefined'){done();return;}loadX('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js',done);}
+function ensureLib(g,srcs,done){if(window[g]){done();return;}var i=0;(function nx(){if(i>=srcs.length){toast('بارگذاری '+g+' ناموفق','err');return;}var s=document.createElement('script');s.src=srcs[i++];s.onload=function(){done();};s.onerror=nx;document.head.appendChild(s);})();}
+function isD(s){return /^\d{4}[-\/]\d{1,2}[-\/]\d{1,2}$/.test(s);}
+function isT(s){return s==='خرید'||s==='فروش'||s.indexOf('خرید')>=0||s.indexOf('فروش')>=0;}
+function isF(f){return f&&/\.(xlsx|xls|csv|txt)$/i.test(f.name);}
+function detCols(rows,hint){
+  var m={date:-1,type:-1,symbol:-1,qty:-1,price:-1,done:-1},r0=-1;
+  for(var i=hint;i<rows.length;i++)if(rows[i]&&rows[i].length){r0=i;break;}
+  if(r0<0)return{map:m,start:-1};
+  var f=rows[r0];
+  for(var c=0;c<f.length;c++){var s=String(f[c]==null?'':f[c]).trim();if(!s)continue;
+    if(m.date<0&&isD(s)){m.date=c;continue;}if(m.type<0&&isT(s)){m.type=c;continue;}
+    var n=toNum(s);if(!isNaN(n)){if(m.qty<0){m.qty=c;continue;}if(m.price<0){m.price=c;continue;}}else if(m.symbol<0)m.symbol=c;}
+  return{map:m,start:r0};
+}
+function parseSheet(ws){
+  var rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:null});if(!rows||!rows.length)return{rows:[],canceled:0};
+  var hi=-1,m=null,start=0,lim=Math.min(10,rows.length);
+  for(var i=0;i<lim;i++){if(!rows[i])continue;
+    var row=rows[i].map(function(c){return String(c==null?'':c).trim();}),mm={date:-1,type:-1,symbol:-1,qty:-1,price:-1,done:-1};
+    for(var j=0;j<row.length;j++){var h=row[j];if(!h)continue;
+      if(mm.date<0&&h.indexOf('تاریخ')>=0){mm.date=j;continue;}if(mm.type<0&&h.indexOf('نوع')>=0){mm.type=j;continue;}
+      if(mm.symbol<0&&h.indexOf('نماد')>=0){mm.symbol=j;continue;}if(mm.done<0&&h.indexOf('انجام')>=0){mm.done=j;continue;}
+      if(mm.qty<0&&(h.indexOf('تعداد')>=0||h.indexOf('حجم')>=0)){mm.qty=j;continue;}if(mm.price<0&&h.indexOf('قیمت')>=0){mm.price=j;continue;}}
+    if(mm.date>=0||mm.symbol>=0||mm.qty>=0||mm.done>=0){hi=i;m=mm;break;}}
+  if(hi>=0){start=hi+1;var d=detCols(rows,start);['date','type','symbol','qty','price'].forEach(function(k){if(m[k]<0)m[k]=d.map[k];});}
+  else{var d2=detCols(rows,0);m=d2.map;start=d2.start;if(start<0)return{rows:[],canceled:0};}
+  var qi=m.done>=0?m.done:m.qty,out=[],canc=0;
+  for(var r=start;r<rows.length;r++){var rr=rows[r];if(!rr||!rr.length)continue;
+    var sym=m.symbol>=0?String(rr[m.symbol]==null?'':rr[m.symbol]).trim():'',q=qi>=0?toNum(rr[qi]):NaN,
+        p=m.price>=0?toNum(rr[m.price]):NaN,ty=m.type>=0?String(rr[m.type]==null?'':rr[m.type]).trim():'',dt=m.date>=0?rr[m.date]:'';
+    if(!isNaN(q)&&q===0){canc++;continue;}
+    if(!sym||isNaN(q)||isNaN(p)||q<=0||p<0)continue;
+    if(isT(sym)&&ty&&!isT(ty)){var t=sym;sym=ty;ty=t;}
+    if(isT(sym)&&!ty){ty=sym;sym='';}
+    if(!sym)continue;
+    out.push({rawDate:dt,type:ty.indexOf('فروش')>=0?'فروش':'خرید',symbol:sym,quantity:Math.round(q),price:t2(p)});}
+  return{rows:out,canceled:canc};
+}
+window.handleExcelFile=function(f){if(!f)return;if(!isF(f)){toast('فرمت پشتیبانی نمی‌شود','err');return;}ensureX(function(){impFile(f);});};
+function impFile(file){
+  var rd=new FileReader();
+  rd.onload=function(e){
+    try{
+      var wb=XLSX.read(e.target.result,{type:'array'}),parsed=[],canc=0;
+      for(var s=0;s<wb.SheetNames.length;s++){var r=parseSheet(wb.Sheets[wb.SheetNames[s]]);if(r.rows.length){parsed=r.rows;canc=r.canceled;break;}}
+      if(!parsed.length){toast('تراکنشی یافت نشد','err');return;}
+      pendingImport=[];var warn=0;
+      parsed.forEach(function(p){var date=nd(p.rawDate),dup=data.transactions.some(function(t){return t.date===date&&t.symbol===p.symbol&&t.quantity===p.quantity&&t.price===p.price&&t.type===p.type;});
+        pendingImport.push({date:date,type:p.type,symbol:p.symbol,quantity:p.quantity,price:p.price,isDup:dup});if(dup)warn++;});
+      document.getElementById('importCount').textContent=pendingImport.length;
+      document.getElementById('importBody').innerHTML=pendingImport.map(function(t,i){
+        return '<tr style="'+(t.isDup?'background:rgba(255,59,92,.12)':'')+'"><td>'+(i+1)+'</td><td>'+t.date+'</td><td><span class="badge '+(t.type==='خرید'?'bg-buy':'bg-sell')+'">'+t.type+'</span></td><td>'+esc(t.symbol)+'</td><td>'+fI(t.quantity)+'</td><td>'+fP(t.price)+'</td><td>'+(t.isDup?'⚠️ تکراری':'✓')+'</td></tr>';}).join('');
+      var map=allQty();pendingImport.forEach(function(q){map[q.symbol]=(map[q.symbol]||0)+(q.type==='خرید'?q.quantity:-q.quantity);});
+      var ps=[];for(var k in map)ps.push(k+': '+fI(map[k]));
+      var sm=document.getElementById('importSummary');sm.innerHTML='<b>موجودی پس از ایمپورت:</b><br>'+ps.join(' | ');sm.style.display='block';
+      document.getElementById('importPreview').style.display='block';document.getElementById('importSection').classList.add('on');
+      toast('«'+file.name+'»: '+pendingImport.length+' تراکنش'+(canc?' · '+canc+' لغوشده':'')+(warn?' · '+warn+' تکراری':''),'info');
+    }catch(err){toast('خطا: '+err.message,'err');}
+  };
+  rd.readAsArrayBuffer(file);
+}
+window.confirmImport=function(){
+  if(!pendingImport.length)return;
+  stashRecovery('پیش از ایمپورت');
+  var snap=clone(data),sorted=pendingImport.slice().sort(function(a,b){return dk(a.date)-dk(b.date);}),base=Date.now(),warns=[],n=0;
+  sorted.forEach(function(t,i){
+    if(t.type==='فروش'){var av=qtyOf(t.symbol);if(t.quantity>av)warns.push(t.date+' فروش '+t.symbol+' '+fI(t.quantity)+' از موجودی '+fI(av)+' بیشتر است');}
+    var o=mkTx(t.date,t.type,t.symbol,t.quantity,t.price,t.type==='خرید'?'فعال':'',NaN,NaN);o.createdAt=base+i;data.transactions.push(o);
+    if(data.hiddenSymbols[t.symbol]&&qtyOf(t.symbol)>0)delete data.hiddenSymbols[t.symbol];n++;});
+  sortTx();sync();save();renderAll();
+  var w=document.getElementById('importWarnings');
+  if(warns.length){w.innerHTML='<b>⚠️ هشدار توازن ('+warns.length+'):</b><br>'+warns.join('<br>');w.style.display='block';}else w.style.display='none';
+  cancelImport();toast('✅ '+fI(n)+' تراکنش ثبت شد — فروش‌های قدیمی را با 🎯 احتساب کن','ok');tick(820,.1);offerUndo('ایمپورت',snap);
+};
+window.cancelImport=function(){pendingImport=[];document.getElementById('importPreview').style.display='none';document.getElementById('excelFile').value='';};
+var dz=document.getElementById('dropZone');
+if(dz){['dragenter','dragover'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('hot');});});
+  dz.addEventListener('dragleave',function(){dz.classList.remove('hot');});
+  dz.addEventListener('drop',function(e){e.preventDefault();e.stopPropagation();dz.classList.remove('hot');if(e.dataTransfer.files[0])handleExcelFile(e.dataTransfer.files[0]);});}
+window.addEventListener('dragover',function(e){e.preventDefault();});
+window.addEventListener('drop',function(e){e.preventDefault();var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(!f)return;
+  if(isF(f)){showTab('trade');document.getElementById('importSection').classList.add('on');handleExcelFile(f);}
+  else if(/\.json$/i.test(f.name)){if(/transfer/i.test(f.name))importTransferFile(f);else restoreBackup(f);}
+  else toast('فرمت پشتیبانی نمی‌شود','warn');});
+
+/* ---------- backup ---------- */
+function pw(){return localStorage.getItem('stockAppPassword')||'1234';}
+window.changePassword=function(){var v=document.getElementById('newPassword').value.trim();if(!v){toast('رمز جدید را وارد کن','err');return;}localStorage.setItem('stockAppPassword',v);document.getElementById('newPassword').value='';toast('رمز تغییر کرد ✅','ok');};
+window.verifyPassword=function(a){if(document.getElementById('backupPassword').value!==pw()){toast('❌ رمز اشتباه است','err');return;}if(a==='download')downloadBackup();else document.getElementById('backupFile').click();document.getElementById('backupPassword').value='';};
+window.saveWebApp=function(){var u=document.getElementById('webAppUrl').value.trim();if(!u){toast('آدرس را وارد کن','err');return;}localStorage.setItem('webAppUrl',u);toast('ذخیره شد ✅','ok');};
+window.uploadToDrive=function(){var u=localStorage.getItem('webAppUrl')||WEBAPP;
+  fetch(u,{method:'POST',body:JSON.stringify({user:currentUser,data:data}),redirect:'follow'}).then(function(r){return r.json();})
+  .then(function(r){toast(r&&r.success?'☁️ ذخیره شد':'خطا در ذخیره',r&&r.success?'ok':'err');})
+  .catch(function(e){var m=e.message||'';toast('خطا: '+m+(/Failed to fetch/.test(m)?' · /exec و Anyone را بررسی کن':''),'err');});};
+function fillMissing(old){['dayPrices','breakEvens','hiddenSymbols','saveAdjust','savePlan'].forEach(function(k){for(var x in old[k])if(!(x in data[k]))data[k][x]=old[k][x];});}
+window.downloadFromDrive=function(){var u=localStorage.getItem('webAppUrl')||WEBAPP;
+  fetch(u+'?user='+encodeURIComponent(currentUser),{redirect:'follow'}).then(function(r){return r.json();})
+  .then(function(r){if(r&&r.data){stashRecovery('پیش از دریافت Drive');var old=clone(data),snap=clone(data);data=r.data;norm();migrate();fillMissing(old);sortTx();sync();save();renderAll();toast('📥 دریافت شد','ok');offerUndo('دریافت Drive',snap);}else toast('داده‌ای یافت نشد','warn');})
+  .catch(function(e){toast('خطا: '+(e.message||''),'err');});};
+function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o))));}
+function dec(s){return JSON.parse(decodeURIComponent(escape(atob(s.trim()))));}
+window.exportTransfer=function(){var b=new Blob([JSON.stringify({app:'stockApp',user:currentUser,data:data},null,1)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='stock_transfer_'+currentUser+'.json';a.click();toast('فایل انتقال ساخته شد','ok');};
+function mergeIn(inc){
+  if(!inc||!inc.transactions){toast('داده معتبر نیست','err');return;}
+  stashRecovery('پیش از ادغام');
+  var snap=clone(data),ids={},at=0,ad=0;
+  data.transactions.forEach(function(t){ids[t.id]=1;});
+  inc.transactions.forEach(function(t){if(t&&t.id&&!ids[t.id]){data.transactions.push(t);ids[t.id]=1;at++;}});
+  var dd={};data.deposits.forEach(function(d){dd[d.id]=1;});
+  (inc.deposits||[]).forEach(function(d){if(d&&d.id&&!dd[d.id]){data.deposits.push(d);dd[d.id]=1;ad++;}});
+  ['dayPrices','breakEvens','hiddenSymbols','saveAdjust','savePlan'].forEach(function(k){if(inc[k])for(var x in inc[k])data[k][x]=inc[k][x];});
+  sortTx();sync();save();renderAll();toast('✅ ادغام: '+fI(at)+' معامله، '+fI(ad)+' نقدی','ok');offerUndo('ادغام',snap);
+}
+window.importTransferFile=function(f){if(!f)return;var r=new FileReader();r.onload=function(e){try{var j=JSON.parse(e.target.result);mergeIn(j.data||j);}catch(err){toast('خطا: '+err.message,'err');}};r.readAsText(f);};
+window.makeTransferCode=function(){document.getElementById('transferCodeOut').value=enc({app:'stockApp',user:currentUser,data:data});toast('کد ساخته شد','ok');};
+window.copyTransferCode=function(){var t=document.getElementById('transferCodeOut');if(!t.value){toast('اول کد بساز','err');return;}t.select();t.setSelectionRange(0,999999);try{document.execCommand('copy');toast('📋 کپی شد','ok');}catch(e){toast('کپی نشد','err');}};
+window.readTransferCode=function(){var s=document.getElementById('transferCodeIn').value.trim();if(!s){toast('کد را بچسبان','err');return;}try{var o=dec(s);mergeIn(o.data||o);document.getElementById('transferCodeIn').value='';}catch(e){toast('کد معتبر نیست','err');}};
+window.saveLanUrl=function(){var u=document.getElementById('lanUrl').value.trim();if(u)localStorage.setItem('lanUrl',u);else localStorage.removeItem('lanUrl');toast('ذخیره شد','ok');};
+function lan(){var b=(document.getElementById('lanUrl').value||'').trim().replace(/\/+$/,'');return b?b+'/sync':'sync';}
+window.uploadLan=function(){fetch(lan(),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user:currentUser,data:data})}).then(function(r){return r.json();}).then(function(r){toast(r&&r.success?'📤 ارسال شد':'خطای سرور',r&&r.success?'ok':'err');}).catch(function(){toast('اتصال برقرار نشد','err');});};
+window.downloadLan=function(){fetch(lan()+'?user='+encodeURIComponent(currentUser)).then(function(r){return r.json();}).then(function(r){if(r&&r.data)mergeIn(r.data);else toast('سرور خالی است','warn');}).catch(function(){toast('اتصال برقرار نشد','err');});};
+window.generateMultiQR=function(){
+  ensureLib('QRCode',['https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js','https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js'],function(){
+    var str=JSON.stringify({app:'stockApp',user:currentUser,data:data});
+    if(!data.transactions.length&&!data.deposits.length){toast('داده‌ای نیست','warn');return;}
+    var CH=2400,total=Math.ceil(str.length/CH);
+    document.getElementById('qrDisplay').style.display='block';
+    var c=document.getElementById('qrcodeContainer');c.innerHTML='';document.getElementById('btnDownloadAllQR').style.display='inline-flex';
+    for(var i=0;i<total;i++){var d=document.createElement('div');d.style.cssText='text-align:center;background:#fff;padding:9px;border-radius:12px';
+      var l=document.createElement('div');l.style.cssText='color:#0b1222;font-weight:700;font-size:.7rem;margin-bottom:5px';l.textContent='QR '+(i+1)+' / '+total;
+      var q=document.createElement('div');d.appendChild(l);d.appendChild(q);c.appendChild(d);
+      new QRCode(q,{text:'CHUNK:'+i+':'+total+':'+str.substr(i*CH,CH),width:200,height:200,correctLevel:QRCode.CorrectLevel.M});}
+    document.getElementById('qrInfo').textContent='✅ '+total+' QR · '+(str.length/1024).toFixed(1)+' KB';toast(total+' QR آماده است','ok');
+  });};
+window.downloadAllQR=function(){var cs=document.getElementById('qrcodeContainer').querySelectorAll('canvas');if(!cs.length){toast('اول QR بساز','warn');return;}
+  for(var i=0;i<cs.length;i++)(function(cv,x){setTimeout(function(){var a=document.createElement('a');a.download='stock_qr_'+(x+1)+'.png';a.href=cv.toDataURL();a.click();},x*280);})(cs[i],i);
+  toast(cs.length+' فایل دانلود می‌شود','ok');};
+window.startQRScan=function(){
+  ensureLib('Html5Qrcode',['https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js','https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js'],function(){
+    chunks={};chunkTotal=0;document.getElementById('qr-reader').innerHTML='';
+    document.getElementById('btnStopScan').style.display='inline-flex';document.getElementById('qrScanResult').innerHTML='';
+    document.getElementById('qrScanProgress').textContent='📷 دوربین فعال — QRها را به ترتیب اسکن کن';
+    qrScanner=new Html5Qrcode('qr-reader');
+    qrScanner.start({facingMode:'environment'},{fps:10,qrbox:{width:250,height:250}},procChunk,function(){}).catch(function(e){document.getElementById('qrScanResult').innerHTML='<div class="note n-amber">❌ '+e+'</div>';});
+  });};
+function procChunk(txt){
+  if(typeof txt!=='string'||txt.indexOf('CHUNK:')!==0){
+    try{var o=dec(txt);if(o&&o.data){stopQRScan();mergeIn(o.data);return;}}catch(e){}
+    try{var j=JSON.parse(txt);if(j&&j.data){stopQRScan();mergeIn(j.data);return;}}catch(e2){}return;}
+  var p1=txt.indexOf(':'),p2=txt.indexOf(':',p1+1),p3=txt.indexOf(':',p2+1);if(p1<0||p2<0||p3<0)return;
+  var i=parseInt(txt.substring(p1+1,p2),10),tt=parseInt(txt.substring(p2+1,p3),10);if(isNaN(i)||isNaN(tt))return;
+  chunkTotal=tt;var isNew=chunks[i]===undefined;chunks[i]=txt.substring(p3+1);
+  var n=Object.keys(chunks).length;
+  document.getElementById('qrScanProgress').innerHTML='📊 <b style="color:var(--acid)">'+fI(n)+'</b> از '+fI(tt)+' اسکن شد';
+  if(isNew)tick(880,.08);
+  if(n===tt){stopQRScan();var full='';for(var x=0;x<tt;x++)full+=(chunks[x]||'');
+    try{var o=JSON.parse(full);mergeIn(o.data||o);document.getElementById('qrScanResult').innerHTML='<div class="note n-green">✅ ادغام شد</div>';}
+    catch(e){document.getElementById('qrScanResult').innerHTML='<div class="note n-amber">❌ خطا در ترکیب</div>';}}
+}
+window.stopQRScan=function(){if(qrScanner){try{qrScanner.stop().then(function(){try{qrScanner.clear();}catch(e){}qrScanner=null;}).catch(function(){});}catch(e){qrScanner=null;}}
+  document.getElementById('btnStopScan').style.display='none';document.getElementById('qrScanProgress').textContent='';};
+window.exportCSV=function(){
+  if(!data.transactions.length){toast('معامله‌ای نیست','warn');return;}
+  var rows=data.transactions.slice().sort(function(a,b){var ka=dk(a.date),kb=dk(b.date);if(ka!==kb)return ka-kb;return(a.createdAt||0)-(b.createdAt||0);});
+  var lines=['\uFEFFتاریخ,نماد,نوع معامله,تعداد,قیمت سهم,برچسب سیو'];
+  rows.forEach(function(t){lines.push([t.date,t.symbol,t.type,t.quantity,t.price,t.saveTag?'سیو':''].join(','));});
+  var b=new Blob([lines.join('\r\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='transactions_'+currentUser+'.csv';a.click();toast('CSV دانلود شد','ok');};
+window.downloadBackup=function(){var o={};o[currentUser]=data;var b=new Blob([JSON.stringify(o,null,1)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='stock_backup_'+currentUser+'.json';a.click();toast('پشتیبان دانلود شد 📥','ok');};
+window.restoreBackup=function(f){if(!f)return;var r=new FileReader();
+  r.onload=function(e){try{var j=JSON.parse(e.target.result),u=j[currentUser]||j[Object.keys(j)[0]];
+    if(!u){toast('داده‌ای یافت نشد','err');return;}
+    stashRecovery('پیش از بازیابی فایل');
+    var old=clone(data),snap=clone(data);
+    data={v:5,transactions:u.transactions||[],deposits:u.deposits||[],dayPrices:u.dayPrices||{},breakEvens:u.breakEvens||{},hiddenSymbols:u.hiddenSymbols||{},saveAdjust:u.saveAdjust||{},savePlan:u.savePlan||{}};
+    if(u.savedProfit)data.savedProfit=u.savedProfit;
+    norm();migrate();fillMissing(old);sortTx();sync();save();renderAll();toast('بازیابی شد ✅','ok');offerUndo('بازیابی فایل',snap);
+  }catch(err){toast('خطا: '+err.message,'err');}};r.readAsText(f);};
+window.clearAllData=function(){if(!confirm('⚠️ همهٔ داده‌ها حذف شوند؟'))return;if(!confirm('⚠️ آخرین تأیید'))return;
+  stashRecovery('پیش از حذف کامل');
+  var snap=clone(data);data=defData();lastCreatedId=null;selection={};save();renderAll();toast('حذف شد — نسخهٔ نجات موجود است','warn');offerUndo('حذف کامل',snap);};
+
+/* ---------- demo ---------- */
+function mergePrices(dp,be){
+  Object.keys(dp).forEach(function(k){if(!(k in data.dayPrices))data.dayPrices[k]=dp[k];});
+  Object.keys(be).forEach(function(k){if(!(k in data.breakEvens))data.breakEvens[k]=be[k];});
+}
+window.seedDemo=function(){
+  if(!confirm('چند معاملهٔ نمونه اضافه شود؟\nقیمت روز و سربه‌سرهای فعلی دست‌نخورده می‌مانند.'))return;
+  stashRecovery('پیش از افزودن نمونه');
+  var snap=clone(data),base=Date.now();
+  var seed=[['1404-06-02','خرید','خودرو',4000,1850],['1404-06-20','فروش','خودرو',1500,2100],['1404-07-05','خرید','خودرو',2000,2250],
+            ['1404-05-14','خرید','فولاد',3000,5400],['1404-06-11','خرید','فولاد',2500,5900],['1404-07-08','فروش','فولاد',2000,6600]];
+  seed.forEach(function(r,i){var t=mkTx(r[0],r[1],r[2],r[3],r[4],'فعال',NaN,NaN);t.createdAt=base+i;data.transactions.push(t);});
+  mergePrices({'خودرو':2400,'فولاد':6900},{});
+  sortTx();sync();save();renderAll();toast('نمونه اضافه شد 🎲','ok');offerUndo('افزودن نمونه',snap);
+};
+function initialSeed(){
+  var base=Date.now();
+  var seed=[
+    ['1404-01-10','خرید','سینرژی',5000,2000],['1404-02-02','خرید','سینرژی',3000,2400],['1404-03-05','فروش','سینرژی',2000,2750],
+    ['1404-01-20','خرید','وکبهمن',2600,3100],['1404-02-14','خرید','وکبهمن',1400,3450],['1404-04-01','فروش','وکبهمن',900,3990],
+    ['1403-11-06','خرید','عیار',12000,412000],['1404-01-18','خرید','عیار',9000,505000],['1404-02-25','خرید','عیار',10110,662059],['1404-05-12','فروش','عیار',700,694121],
+    ['1404-02-08','خرید','شپنا',6000,1420],['1404-03-19','خرید','شپنا',4000,1580],['1404-05-02','فروش','شپنا',3000,1760],
+    ['1404-03-04','خرید','آریا',2200,8600],['1404-04-16','خرید','آریا',1300,9400]
+  ];
+  seed.forEach(function(r,i){var t=mkTx(r[0],r[1],r[2],r[3],r[4],'فعال',NaN,NaN);t.createdAt=base+i;data.transactions.push(t);});
+  data.deposits.push({id:uid(),createdAt:base,date:'1403-11-01',type:'واریز',amount:9000000000,rawAmount:9000000000,desc:'سرمایه اولیه'});
+  data.deposits.push({id:uid(),createdAt:base+1,date:'1404-04-10',type:'برداشت',amount:-400000000,rawAmount:400000000,desc:'برداشت شخصی'});
+  mergePrices({'سینرژی':3000,'وکبهمن':3990,'عیار':641720,'شپنا':1890,'آریا':10250},
+              {'سینرژی':2180,'وکبهمن':3260,'عیار':653000,'شپنا':1520,'آریا':8940});
+  data.transactions.forEach(function(t){if(t.symbol==='وکبهمن'&&t.type==='فروش')t.saveTag=true;});
+  sortTx();sync();save();
+}
+
+/* ---------- render + boot ---------- */
+function updateFilter(keep){
+  var sel=document.getElementById('symbolFilter'),cur=keep||sel.value,syms=[],seen={};
+  data.transactions.forEach(function(t){if(!seen[t.symbol]){seen[t.symbol]=1;syms.push(t.symbol);}});
+  syms.sort(function(a,b){return a.localeCompare(b,'fa');});
+  sel.innerHTML='<option value="all">همه نمادها</option>'+syms.map(function(s){return '<option value="'+esc(s)+'">'+esc(s)+'</option>';}).join('');
+  sel.value=(cur==='all'||seen[cur])?cur:'all';
+}
+function renderAll(keep){updateFilter(keep);renderList();renderCash();renderPnl();runCalc();renderRecovery();}
+function bootUser(){
+  load();
+  var flag='seeded_'+currentUser,seeded=localStorage.getItem(flag),empty=isEmptyLedger();
+  var note=document.getElementById('guardNote');
+  if(empty&&!seeded){
+    initialSeed();
+    if(note){note.innerHTML='🌱 دفتر خالی بود، پس یک <b>نمونهٔ آموزشی</b> بارگذاری شد. برای دادهٔ خودت: پشتیبان → حذف همه داده‌ها، سپس ایمپورت اکسل.';note.style.display='block';}
+  }else if(note){
+    note.innerHTML=!empty?('🛡️ <b>دادهٔ موجود شناسایی شد</b> ('+fI(data.transactions.length)+' معامله). هیچ نمونه‌ای اضافه نشد و قیمت روز / سربه‌سرهای تو <b>دست‌نخورده</b> ماند.'):'📂 دفتر خالی است. معامله ثبت کن یا ایمپورت اکسل بزن.';
+    note.style.display='block';
+  }
+  localStorage.setItem(flag,'1');
+  sortTx();sync();save();renderAll(restoreView());
+}
+try{
+  soundOn=localStorage.getItem('snd')!=='0';document.getElementById('soundBtn').textContent=soundOn?'🔊':'🔇';
+  if(location.protocol==='file:')document.getElementById('protoWarn').style.display='block';
+  var sc=localStorage.getItem('commissionRate'),st=localStorage.getItem('takeProfitMult'),ss=localStorage.getItem('stopLossMult');
+  if(sc)document.getElementById('commissionRate').value=sc;
+  if(st)document.getElementById('takeProfitMult').value=st;
+  if(ss)document.getElementById('stopLossMult').value=ss;
+  document.getElementById('webAppUrl').value=localStorage.getItem('webAppUrl')||WEBAPP;
+  if(localStorage.getItem('lanUrl'))document.getElementById('lanUrl').value=localStorage.getItem('lanUrl');
+  bootUser();
+  var lt=localStorage.getItem('tab_'+currentUser);
+  if(lt&&document.getElementById('p-'+lt))showTab(lt);else showTab('day');
+}catch(err){console.error(err);toast('خطای راه‌اندازی: '+err.message,'err');}
+});
+</script>
+</body>
+</html>
